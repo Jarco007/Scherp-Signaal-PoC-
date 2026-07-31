@@ -371,6 +371,15 @@ body{font-family:'Barlow',sans-serif;background:#f4f6f9;}
 /* ══ APP WRAPPER ══ */
 #app-wrapper{display:none;}
 </style>
+<script>
+// Als gebruiker terugkomt vanuit app.html, direct naar dashboard
+if (sessionStorage.getItem('gotoDashboard') === '1') {
+  sessionStorage.removeItem('gotoDashboard');
+  document.addEventListener('DOMContentLoaded', function() {
+    toonScherm('scherm-dashboard');
+  });
+}
+</script>
 </head>
 <body>
 <div class="demo-shell">
@@ -394,15 +403,15 @@ body{font-family:'Barlow',sans-serif;background:#f4f6f9;}
       </div>
       <div class="gemeente-optie-radio"></div>
     </div>
-    <div class="gemeente-optie" onclick="selecteerGemeente('demo1', this)">
+    <div class="gemeente-optie" style="opacity:0.4;cursor:not-allowed;">
       <div class="gemeente-optie-placeholder">Binnenkort</div>
       <div class="gemeente-optie-info">
-        <h3>Gemeente Heerenveen</h3>
+        <h3>Gemeente Deventer</h3>
         <p>Binnenkort beschikbaar</p>
       </div>
       <div class="gemeente-optie-radio"></div>
     </div>
-    <div class="gemeente-optie" onclick="selecteerGemeente('demo2', this)">
+    <div class="gemeente-optie" style="opacity:0.4;cursor:not-allowed;">
       <div class="gemeente-optie-placeholder">Binnenkort</div>
       <div class="gemeente-optie-info">
         <h3>Gemeente Kampen</h3>
