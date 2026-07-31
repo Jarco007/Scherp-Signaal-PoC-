@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#006a8e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Scherp Signaal">
+<meta name="description" content="Een tool om signalen van ondermijning bij jongeren scherp te krijgen en te beoordelen.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTIiIGZpbGw9IiMwMDZhOGUiLz4KICA8cG9seWdvbiBwb2ludHM9IjY0LDM2IDY0LDY0IDM2LDY0IiBmaWxsPSIjZmY2YTEzIi8+CiAgPHRleHQgeD0iMzIiIHk9IjQ0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iJ0JhcmxvdyBDb25kZW5zZWQnLEFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZpbGw9IndoaXRlIj5TPC90ZXh0Pgo8L3N2Zz4=">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjEwMCIgZmlsbD0iIzAwNmE4ZSIvPjxwb2x5Z29uIHBvaW50cz0iNTEyLDI4OCA1MTIsNTEyIDI4OCw1MTIiIGZpbGw9IiNmZjZhMTMiLz48dGV4dCB4PSIyNTYiIHk9IjM1MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzAwIiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSJ3aGl0ZSI+UzwvdGV4dD48L3N2Zz4=">
+<link rel="manifest" href="manifest.json">
+<title>Scherp Signaal</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blauw:#006a8e;--blauw-dark:#004f6b;--blauw-light:#e0f2f8;
+  --oranje:#ff6a13;--oranje-dark:#d95500;
+  --grijs-licht:#f4f6f9;--grijs:#e8ebf0;
+  --tekst:#1a1a2e;--tekst-zacht:#6b7280;
+  --groen:#22c55e;--rood:#ef4444;
+  --r:18px;--rsm:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{height:100%;-webkit-text-size-adjust:100%;}
+body{
+  font-family:'Barlow',sans-serif;
+  background:var(--blauw-dark);
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;min-height:-webkit-fill-available;
+  overflow:hidden;
+}
+.shell{
+  width:100%;max-width:430px;
+  height:100vh;height:100dvh;
+  background:var(--grijs-licht);
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.screen{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;
+  transition:opacity .3s ease,transform .3s ease;
+  transform:translateX(24px);
+}
+.screen.active{opacity:1;pointer-events:all;transform:translateX(0);}
+
+/* ══════════════════════════
+   SCHERM 1 — START
+══════════════════════════ */
+#s-start{background:var(--blauw);}
+.start-hero{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:40px 32px 24px;position:relative;overflow:hidden;
+}
+.start-hero::after{
+  content:'';position:absolute;bottom:-40px;right:-40px;
+  width:220px;height:220px;background:var(--oranje);
+  clip-path:polygon(100% 0%,100% 100%,0% 100%);opacity:.18;
+}
+.start-hero::before{
+  content:'';position:absolute;top:-60px;left:-60px;
+  width:180px;height:180px;background:white;
+  border-radius:50%;opacity:.04;
+}
+.logo-mark{display:flex;align-items:center;gap:12px;margin-bottom:32px;}
+.logo-icon{
+  width:52px;height:52px;border-radius:13px;
+  background:white;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.logo-icon::after{
+  content:'';position:absolute;bottom:0;right:0;
+  border-left:26px solid transparent;border-bottom:26px solid var(--oranje);
+}
+.logo-icon span{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:22px;font-weight:900;color:var(--blauw);z-index:1;
+}
+.logo-naam{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:34px;font-weight:600;color:white;letter-spacing:-.3px;
+}
+.logo-naam em{color:var(--oranje);font-style:normal;}
+.start-titel{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:44px;font-weight:600;
+  color:white;text-align:center;line-height:1.02;margin-bottom:16px;
+}
+.start-titel em{color:var(--oranje);font-style:normal;}
+.start-sub{
+  font-size:15px;color:rgba(255,255,255,.68);
+  text-align:center;line-height:1.65;max-width:290px;margin-bottom:0;
+}
+.start-bottom{
+  background:white;border-radius:28px 28px 0 0;
+  padding:28px 24px 36px;
+}
+.start-kaart-tekst{
+  font-size:14px;color:var(--tekst-zacht);
+  line-height:1.6;text-align:center;margin-bottom:22px;
+}
+.grote-btn{
+  width:100%;padding:17px;
+  background:var(--oranje);color:white;border:none;
+  border-radius:14px;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:21px;font-weight:700;letter-spacing:.04em;
+  cursor:pointer;transition:all .2s;
+}
+.grote-btn:hover{background:var(--oranje-dark);}
+.grote-btn:active{transform:scale(.98);}
+.grote-btn:disabled{background:#cbd5e1;cursor:not-allowed;transform:none;}
+.versie-tag{
+  text-align:center;margin-top:14px;
+  font-size:11px;color:#94a3b8;
+}
+
+/* ══════════════════════════
+   SCHERM 2 — INSTRUCTIE
+══════════════════════════ */
+#s-instructie{background:var(--grijs-licht);overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.instructie-header{
+  background:var(--blauw);padding:16px 18px 18px;
+  display:flex;align-items:center;gap:12px;flex-shrink:0;
+}
+.terug-btn{
+  width:36px;height:36px;border-radius:9px;
+  background:rgba(255,255,255,.15);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  color:white;font-size:18px;flex-shrink:0;
+}
+.terug-btn:hover{background:rgba(255,255,255,.25);}
+.instructie-header-titel{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:20px;font-weight:700;color:white;flex:1;
+}
+.instructie-body{padding:24px 20px 32px;}
+.instructie-intro{
+  background:white;border-radius:var(--r);
+  padding:18px 20px;margin-bottom:20px;
+  border-left:4px solid var(--oranje);
+}
+.instructie-intro-label{
+  font-size:11px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--oranje);margin-bottom:8px;
+}
+.instructie-intro-tekst{
+  font-size:14px;color:var(--tekst);line-height:1.7;
+}
+.instructie-sectie-titel{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:18px;font-weight:700;color:var(--blauw);
+  margin-bottom:14px;margin-top:4px;
+}
+.stap-kaart{
+  background:white;border-radius:var(--r);
+  padding:16px 18px;margin-bottom:12px;
+  display:flex;gap:14px;align-items:flex-start;
+}
+.stap-nummer{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--blauw);color:white;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:17px;font-weight:800;flex-shrink:0;
+  margin-top:1px;
+}
+.stap-info{}
+.stap-titel{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:17px;font-weight:700;color:var(--tekst);
+  margin-bottom:5px;
+}
+.stap-tekst{font-size:13px;color:#374151;line-height:1.6;}
+.instructie-verder-wrap{padding:4px 0 0;}
+
+/* ══════════════════════════
+   SCHERM 3 — OMGEVING
+══════════════════════════ */
+#s-omgeving{background:var(--blauw);}
+.omgeving-hero{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:16px 28px 16px;position:relative;overflow:hidden;
+}
+.omgeving-hero::after{
+  content:'';position:absolute;bottom:-40px;right:-40px;
+  width:180px;height:180px;background:var(--oranje);
+  clip-path:polygon(100% 0%,100% 100%,0% 100%);opacity:.15;
+}
+.omgeving-hero-titel{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:36px;font-weight:600;
+  color:white;text-align:center;line-height:1.05;margin-bottom:10px;
+}
+.omgeving-hero-titel em{color:var(--oranje);font-style:normal;}
+.omgeving-hero-sub{
+  font-size:14px;color:rgba(255,255,255,.65);
+  text-align:center;line-height:1.6;max-width:270px;
+}
+.omgeving-kaart{
+  background:white;border-radius:28px 28px 0 0;
+  padding:22px 22px 32px;
+}
+.sectie-label{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:12px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--blauw);margin-bottom:13px;
+}
+.omgeving-grid{display:flex;flex-direction:column;gap:9px;margin-bottom:18px;}
+.omgeving-btn{
+  display:flex;align-items:center;gap:13px;
+  padding:13px 15px;border-radius:13px;
+  border:2px solid transparent;background:var(--grijs-licht);
+  cursor:pointer;transition:all .2s;text-align:left;
+}
+.omgeving-btn:hover{background:var(--blauw-light);}
+.omgeving-btn.gekozen{background:var(--blauw-light);border-color:var(--blauw);}
+.omgeving-icoon{
+  width:44px;height:44px;border-radius:11px;
+  background:var(--blauw);display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.omgeving-icoon svg{width:21px;height:21px;}
+.omgeving-info{flex:1;}
+.omgeving-naam{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--tekst);}
+.omgeving-desc{font-size:12px;color:var(--tekst-zacht);margin-top:1px;}
+.omgeving-radio{
+  width:21px;height:21px;border-radius:50%;
+  border:2px solid #d1d5db;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;flex-shrink:0;
+}
+.omgeving-btn.gekozen .omgeving-radio{background:var(--blauw);border-color:var(--blauw);}
+.omgeving-btn.gekozen .omgeving-radio::after{
+  content:'';width:6px;height:10px;
+  border:2px solid white;border-top:none;border-left:none;
+  transform:rotate(45deg) translate(-1px,-2px);display:block;
+}
+
+/* ══════════════════════════
+   SCHERM 4 — SPEL
+══════════════════════════ */
+#s-spel{background:#eef2f7;}
+.spel-header{
+  background:var(--blauw);padding:13px 17px 15px;
+  display:flex;align-items:center;gap:11px;flex-shrink:0;
+}
+.header-midden{flex:1;}
+.header-omgeving{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--oranje);}
+.header-teller{font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:700;color:white;}
+.voortgang-balk{height:3px;background:rgba(255,255,255,.15);flex-shrink:0;}
+.voortgang-fill{height:100%;background:var(--oranje);transition:width .4s ease;}
+.kaart-ruimte{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:14px 14px 6px;position:relative;overflow:hidden;
+}
+.stapel{position:relative;width:100%;max-width:370px;height:100%;max-height:470px;}
+.ghost{
+  position:absolute;inset:0;background:white;
+  border-radius:var(--r);box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+.ghost-2{transform:scale(.94) translateY(14px);opacity:.45;}
+.ghost-1{transform:scale(.97) translateY(7px);opacity:.72;}
+.kaart{
+  position:absolute;inset:0;background:white;
+  border-radius:var(--r);box-shadow:0 10px 40px rgba(0,0,0,.14);
+  display:flex;flex-direction:column;
+  cursor:grab;user-select:none;overflow:hidden;will-change:transform;
+}
+.kaart:active{cursor:grabbing;}
+.overlay-ja,.overlay-nee{
+  position:absolute;inset:0;border-radius:var(--r);
+  display:flex;align-items:flex-start;padding:18px;
+  pointer-events:none;opacity:0;z-index:5;transition:opacity .1s;
+}
+.overlay-ja{background:rgba(34,197,94,.12);border:3px solid #22c55e;justify-content:flex-end;}
+.overlay-nee{background:rgba(239,68,68,.12);border:3px solid #ef4444;justify-content:flex-start;}
+.overlay-badge{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:22px;font-weight:900;letter-spacing:.06em;
+  padding:4px 11px;border-radius:7px;border:3px solid;
+}
+.overlay-ja .overlay-badge{color:#16a34a;border-color:#16a34a;transform:rotate(12deg);}
+.overlay-nee .overlay-badge{color:#dc2626;border-color:#dc2626;transform:rotate(-12deg);}
+.kaart-illu{
+  height:185px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.kaart-body{padding:15px 17px 13px;flex:1;display:flex;flex-direction:column;}
+.kaart-titel{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:23px;font-weight:800;color:var(--tekst);
+  line-height:1.1;margin-bottom:7px;
+}
+.kaart-beschr{font-size:13px;color:#374151;line-height:1.6;flex:1;}
+.kaart-vraag{
+  margin-top:11px;padding:9px 12px;
+  background:var(--blauw-light);border-radius:var(--rsm);
+  border-left:3px solid var(--blauw);
+}
+.kaart-vraag p{font-size:12px;font-weight:600;color:var(--blauw-dark);}
+.knoppen-balk{
+  padding:7px 14px 18px;
+  display:flex;flex-direction:column;align-items:center;gap:7px;flex-shrink:0;
+}
+.swipe-hint{font-size:11px;color:var(--tekst-zacht);display:flex;gap:22px;}
+.swipe-hint span{display:flex;align-items:center;gap:4px;}
+.drie-knoppen{display:flex;align-items:center;gap:15px;}
+.knop-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;cursor:pointer;}
+.knop-cirkel{
+  border-radius:50%;border:2.5px solid;
+  display:flex;align-items:center;justify-content:center;
+  background:white;transition:all .18s;
+}
+.knop-cirkel:active{transform:scale(.9);}
+.knop-niet .knop-cirkel{width:56px;height:56px;border-color:#ef4444;color:#ef4444;}
+.knop-niet .knop-cirkel:hover{background:#fef2f2;}
+.knop-weet .knop-cirkel{width:44px;height:44px;border-color:#9ca3af;color:#9ca3af;}
+.knop-weet .knop-cirkel:hover{background:#f9fafb;}
+.knop-zicht .knop-cirkel{width:56px;height:56px;border-color:#22c55e;color:#22c55e;}
+.knop-zicht .knop-cirkel:hover{background:#f0fdf4;}
+.knop-label{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
+.knop-niet .knop-label{color:#ef4444;}
+.knop-weet .knop-label{color:#9ca3af;}
+.knop-zicht .knop-label{color:#22c55e;}
+
+/* ══════════════════════════
+   CENTRALE SWIPE FEEDBACK
+══════════════════════════ */
+.swipe-feedback{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%) scale(0.8);
+  z-index:50;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .15s ease, transform .15s ease;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.swipe-feedback.zichtbaar-fb .fb-cirkel{background:rgba(22,163,74,.92);border-color:#16a34a;}
+.swipe-feedback.niet-fb .fb-cirkel{background:rgba(220,38,38,.92);border-color:#dc2626;}
+.swipe-feedback.weet-fb .fb-cirkel{background:rgba(100,116,139,.88);border-color:#64748b;}
+.fb-cirkel{
+  width:80px;height:80px;border-radius:50%;
+  border:3px solid;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);
+}
+.fb-cirkel svg{width:38px;height:38px;stroke:white;stroke-width:2.5;}
+.fb-label{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:14px;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:white;
+  background:rgba(0,0,0,.45);
+  padding:4px 12px;border-radius:20px;
+  backdrop-filter:blur(4px);
+}
+.swipe-feedback.toon{opacity:1;transform:translate(-50%,-50%) scale(1);}
+
+/* ══════════════════════════
+   POP-UP MODAL
+══════════════════════════ */
+.popup-overlay{
+  position:absolute;inset:0;
+  background:rgba(0,0,0,.55);
+  display:flex;align-items:center;justify-content:center;
+  z-index:200;
+  opacity:0;pointer-events:none;
+  transition:opacity .25s ease;
+  padding:24px;
+}
+.popup-overlay.toon{opacity:1;pointer-events:all;}
+.popup-kaart{
+  background:white;
+  border-radius:var(--r);
+  padding:24px 22px 20px;
+  width:100%;max-width:340px;
+  transform:translateY(20px) scale(.96);
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+.popup-overlay.toon .popup-kaart{transform:translateY(0) scale(1);}
+.popup-icon{
+  width:48px;height:48px;border-radius:50%;
+  background:var(--blauw-light);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 14px;
+}
+.popup-icon svg{width:22px;height:22px;stroke:var(--blauw);stroke-width:2;fill:none;}
+.popup-titel{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:20px;font-weight:800;color:var(--tekst);
+  text-align:center;margin-bottom:8px;line-height:1.2;
+}
+.popup-tekst{
+  font-size:13px;color:var(--tekst-zacht);
+  text-align:center;line-height:1.6;margin-bottom:20px;
+}
+.popup-knoppen{display:flex;gap:10px;}
+.popup-btn{
+  flex:1;padding:13px;border:none;border-radius:12px;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:18px;font-weight:700;cursor:pointer;
+  transition:all .18s;
+}
+.popup-btn-nee{background:#ff6a13;color:white;}
+.popup-btn-nee:hover{background:#d95500;transform:translateY(-1px);}
+.popup-btn-nee:active{transform:scale(.97);}
+.popup-btn-ja{background:#006a8e;color:white;}
+.popup-btn-ja:hover{background:#004f6b;transform:translateY(-1px);}
+.popup-btn-ja:active{transform:scale(.97);}
+
+/* ══════════════════════════
+   SCHERM 5 — RESULTAAT
+══════════════════════════ */
+#s-resultaat{background:var(--blauw);overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.res-top{
+  background:var(--blauw);
+  padding:22px 22px 16px;
+  display:flex;flex-direction:column;align-items:center;
+  position:relative;
+}
+.res-top::after{
+  content:'';position:absolute;bottom:-20px;left:0;right:0;
+  height:40px;background:var(--grijs-licht);
+  border-radius:24px 24px 0 0;z-index:0;
+}
+.res-label{
+  font-size:11px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--oranje);margin-bottom:6px;text-align:center;
+}
+.res-risico-naam{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:32px;font-weight:900;color:white;
+  text-align:center;margin-bottom:4px;
+}
+.res-risico-sub{
+  font-size:13px;color:rgba(255,255,255,.65);
+  text-align:center;max-width:280px;line-height:1.5;margin-bottom:14px;
+}
+/* Meter container — genoeg ruimte zodat RISICO label nooit verdwijnt */
+.meter-wrap{
+  width:100%;max-width:300px;
+  margin:0 auto 24px;
+  position:relative;z-index:1;
+}
+.res-body{background:var(--grijs-licht);padding:28px 18px 28px;position:relative;z-index:1;}
+
+/* Advies blok */
+.advies-box{
+  border-radius:var(--r);padding:15px 17px;
+  margin-bottom:0;border-left:5px solid;
+}
+.advies-titel{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;margin-bottom:6px;}
+.advies-tekst{font-size:13px;line-height:1.65;}
+
+/* Disclaimer blok — direct onder advies, andere achtergrond */
+.disclaimer-box{
+  border-radius:0 0 var(--r) var(--r);
+  padding:14px 17px;margin-bottom:20px;
+  border-left:5px solid;border-top:1px solid rgba(0,0,0,.08);
+}
+.disclaimer-label{
+  font-size:10px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;margin-bottom:6px;opacity:.7;
+}
+.disclaimer-tekst{font-size:12px;line-height:1.65;}
+
+/* Risico tellers */
+.niveau-samenvatting{margin-bottom:18px;}
+.niveau-rij{
+  display:flex;align-items:center;gap:10px;
+  background:white;border-radius:11px;padding:9px 13px;margin-bottom:7px;
+}
+.niveau-rij-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.niveau-rij-label{font-size:13px;font-weight:600;color:var(--tekst);flex:1;}
+.niveau-rij-count{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;}
+
+/* Dropdown antwoorden */
+.dropdown-wrap{margin-bottom:20px;}
+.dropdown-toggle{
+  width:100%;padding:12px 16px;
+  background:white;border:1.5px solid var(--grijs);
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;transition:all .2s;
+}
+.dropdown-toggle:hover{border-color:var(--blauw);background:var(--blauw-light);}
+.dropdown-toggle-label{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:16px;font-weight:700;color:var(--tekst);
+}
+.dropdown-toggle-pijl{
+  font-size:14px;color:var(--tekst-zacht);
+  transition:transform .25s;
+}
+.dropdown-toggle-pijl.open{transform:rotate(180deg);}
+.dropdown-inhoud{
+  display:none;
+  background:white;
+  border:1.5px solid var(--grijs);
+  border-top:none;
+  border-radius:0 0 12px 12px;
+  overflow:hidden;
+}
+.dropdown-inhoud.open{display:block;}
+.ant-item{
+  display:flex;align-items:center;gap:9px;
+  padding:9px 13px;border-left:4px solid;
+  border-bottom:1px solid var(--grijs);
+}
+.ant-item:last-child{border-bottom:none;}
+.ant-item.zichtbaar{border-color:#22c55e;}
+.ant-item.niet{border-color:#ef4444;}
+.ant-item.weet{border-color:#d1d5db;}
+.ant-dot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
+.ant-item.zichtbaar .ant-dot{background:#dcfce7;color:#16a34a;}
+.ant-item.niet .ant-dot{background:#fee2e2;color:#dc2626;}
+.ant-item.weet .ant-dot{background:#f3f4f6;color:#6b7280;}
+.ant-naam{font-size:13px;font-weight:500;color:var(--tekst);flex:1;}
+.ant-niveau{font-size:10px;color:var(--tekst-zacht);}
+
+.opnieuw-btn{
+  width:100%;padding:15px;background:var(--oranje);color:white;border:none;
+  border-radius:13px;font-family:'Barlow Condensed',sans-serif;
+  font-size:19px;font-weight:700;cursor:pointer;transition:all .2s;margin-bottom:9px;
+}
+.opnieuw-btn:hover{background:var(--oranje-dark);}
+.andere-btn{
+  width:100%;padding:13px;background:transparent;color:var(--blauw);
+  border:2px solid var(--blauw);border-radius:13px;
+  font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;
+  cursor:pointer;transition:all .2s;margin-bottom:18px;
+}
+.andere-btn:hover{background:var(--blauw-light);}
+.footer-logo{display:flex;align-items:center;justify-content:center;gap:8px;padding-bottom:6px;}
+.footer-naam{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--blauw);}
+.footer-naam em{color:var(--oranje);font-style:normal;}
+</style>
+</head>
+<body><div style="position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:9999;pointer-events:none;">
+  <div style="position:absolute;top:8px;right:8px;pointer-events:all;">
+    <a href="/index.html" style="
+      display:inline-flex;align-items:center;gap:6px;
+      background:rgba(0,0,0,0.55);
+      color:white;
+      padding:6px 12px;
+      border-radius:20px;
+      font-size:12px;
+      font-weight:600;
+      text-decoration:none;
+      font-family:sans-serif;
+      backdrop-filter:blur(4px);
+    ">← Dashboard</a>
+  </div>
+</div>
+
+<div class="shell">
+
+<!-- ══════════════════════════
+     SCHERM 1 — START
+══════════════════════════ -->
+<div id="s-start" class="screen active">
+  <div class="start-hero">
+    <div class="logo-mark">
+      <div class="logo-icon"><span>S</span></div>
+      <div class="logo-naam">Scherp <em>Signaal</em></div>
+    </div>
+    <div class="start-titel">Herken<br><em>ondermijning</em></div>
+    <p class="start-sub">Een tool om signalen van ondermijning bij jongeren scherp te krijgen en te beoordelen.</p>
+  </div>
+  <div class="start-bottom">
+    <button class="grote-btn" onclick="naarScherm('instructie')">Aan de slag →</button>
+    <p class="versie-tag">Scherp Signaal · V4.2</p>
+    <p class="versie-tag">Dit is een product van Scherp in Veiligheid.<br>
+    <a href="https://www.scherpinveiligheid.nl" target="_blank" style="color:#ff6a13;">www.scherpinveiligheid.nl</a></p>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+     SCHERM 2 — INSTRUCTIE
+══════════════════════════ -->
+<div id="s-instructie" class="screen">
+  <div class="instructie-header">
+    <button class="terug-btn" onclick="naarScherm('start')">←</button>
+    <div class="instructie-header-titel">Hoe werkt het?</div>
+  </div>
+  <div class="instructie-body">
+    <div class="instructie-intro">
+      <div class="instructie-intro-label">Wanneer gebruik je Scherp Signaal?</div>
+      <div class="instructie-intro-tekst">Gebruik Scherp Signaal op het moment dat je onderbuikgevoel zegt: hier klopt iets niet. Je ziet, hoort of merkt iets bij een jongere dat afwijkt, maar je kunt de situatie niet duiden. Of het nu uiteindelijk gaat om een onschuldige situatie of meerdere ernstige signalen, de app helpt om je waarnemingen scherp te krijgen. Twijfel je over de situatie? Dan is dit hét moment om Scherp Signaal te gebruiken.</div>
+    </div>
+
+    <div class="instructie-sectie-titel">Hoe werkt Scherp Signaal?</div>
+
+    <div class="stap-kaart">
+      <div class="stap-nummer">1</div>
+      <div class="stap-info">
+        <div class="stap-titel">Signalen benoemen</div>
+        <div class="stap-tekst">Je swipet een signaal naar links als het niet zichtbaar is, naar rechts als het wel zichtbaar is, en omhoog als je het niet weet. Je kunt ook de knoppen onderaan gebruiken.</div>
+      </div>
+    </div>
+
+    <div class="stap-kaart">
+      <div class="stap-nummer">2</div>
+      <div class="stap-info">
+        <div class="stap-titel">Risicobeoordeling</div>
+        <div class="stap-tekst">Op basis van jouw ingevoerde signalen wordt een risicobeoordeling gegeven met één van de volgende opties: verwaarloosbaar, laag, gemiddeld, hoog of extreem hoog risico.</div>
+      </div>
+    </div>
+
+    <div class="stap-kaart">
+      <div class="stap-nummer">3</div>
+      <div class="stap-info">
+        <div class="stap-titel">Advies en opvolging</div>
+        <div class="stap-tekst">Op basis van de risicobeoordeling krijg je een passend advies met eventuele vervolgstappen.</div>
+      </div>
+    </div>
+
+    <div class="instructie-verder-wrap">
+      <button class="grote-btn" onclick="naarScherm('omgeving')" style="margin-top:8px;">Verder →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+     SCHERM 3 — OMGEVING
+══════════════════════════ -->
+<div id="s-omgeving" class="screen">
+  <div class="omgeving-hero">
+    <div style="display:flex;align-items:center;gap:12px;width:100%;margin-bottom:20px;">
+      <button class="terug-btn" onclick="naarScherm('instructie')">←</button>
+    </div>
+    <div class="omgeving-hero-titel">Kies je<br><em>type locatie</em></div>
+    <p class="omgeving-hero-sub">Waar spelen de signalen zich af?</p>
+  </div>
+  <div class="omgeving-kaart">
+    <p class="sectie-label">Selecteer een locatie</p>
+    <div class="omgeving-grid">
+      <button class="omgeving-btn" onclick="kiesOmgeving(this,'straat')">
+        <div class="omgeving-icoon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <div class="omgeving-info">
+          <div class="omgeving-naam">Op straat</div>
+          <div class="omgeving-desc">Wijk, buurt, openbare ruimte</div>
+        </div>
+        <div class="omgeving-radio"></div>
+      </button>
+      <button class="omgeving-btn" onclick="kiesOmgeving(this,'school')">
+        <div class="omgeving-icoon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+          </svg>
+        </div>
+        <div class="omgeving-info">
+          <div class="omgeving-naam">School</div>
+          <div class="omgeving-desc">In en rondom de schoolomgeving</div>
+        </div>
+        <div class="omgeving-radio"></div>
+      </button>
+      <button class="omgeving-btn" onclick="kiesOmgeving(this,'sport')">
+        <div class="omgeving-icoon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M4.93 4.93l4.24 4.24M14.83 9.17l4.24-4.24M14.83 14.83l4.24 4.24M9.17 14.83l-4.24 4.24"/>
+          </svg>
+        </div>
+        <div class="omgeving-info">
+          <div class="omgeving-naam">Sport / activiteitencentrum</div>
+          <div class="omgeving-desc">Sportclub, jongerencentrum</div>
+        </div>
+        <div class="omgeving-radio"></div>
+      </button>
+    </div>
+    <button class="grote-btn" id="start-btn" onclick="startSpel()" disabled>Starten →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+     SCHERM 4 — SPEL
+══════════════════════════ -->
+<div id="s-spel" class="screen">
+  <div class="spel-header">
+    <button class="terug-btn" onclick="toonPopup('terug')" title="Terug naar locatiekeuze">←</button>
+    <div class="header-midden">
+      <div class="header-omgeving" id="hdr-omgeving">Op straat</div>
+      <div class="header-teller" id="hdr-teller">Signaal 1 van 24</div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="terug-btn" onclick="toonPopup('info')" title="Hoe werkt Scherp Signaal?">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </button>
+      <button class="terug-btn" onclick="toonPopup('home')" title="Terug naar beginscherm">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="voortgang-balk">
+    <div class="voortgang-fill" id="voortgang" style="width:0%"></div>
+  </div>
+  <div class="kaart-ruimte">
+    <div class="stapel" id="stapel">
+      <div class="ghost ghost-2"></div>
+      <div class="ghost ghost-1"></div>
+      <div class="kaart" id="huidige-kaart">
+        <div class="overlay-ja" id="ov-ja"><div class="overlay-badge">ZICHTBAAR</div></div>
+        <div class="overlay-nee" id="ov-nee"><div class="overlay-badge">NIET ZICHTBAAR</div></div>
+        <div class="kaart-illu" id="k-illu"></div>
+        <div class="kaart-body">
+          <div class="kaart-titel" id="k-titel"></div>
+          <div class="kaart-beschr" id="k-beschr"></div>
+          <div class="kaart-vraag"><p>Is dit signaal zichtbaar in deze situatie?</p></div>
+        </div>
+      </div>
+    </div>
+    <!-- Centrale swipe feedback overlay -->
+    <div class="swipe-feedback" id="swipe-feedback">
+      <div class="fb-cirkel" id="fb-cirkel">
+        <svg id="fb-icoon" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"></svg>
+      </div>
+      <div class="fb-label" id="fb-label"></div>
+    </div>
+  </div>
+  <div class="knoppen-balk">
+    <div class="swipe-hint">
+      <span>← Niet zichtbaar</span>
+      <span>↑ Weet ik niet</span>
+      <span>Zichtbaar →</span>
+    </div>
+    <div class="drie-knoppen">
+      <button class="knop-wrap knop-niet" onclick="verwerkAntwoord('niet')">
+        <div class="knop-cirkel">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </div>
+        <span class="knop-label">Niet zichtbaar</span>
+      </button>
+      <button class="knop-wrap knop-weet" onclick="verwerkAntwoord('weet')">
+        <div class="knop-cirkel">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <span class="knop-label">Weet ik niet</span>
+      </button>
+      <button class="knop-wrap knop-zicht" onclick="verwerkAntwoord('zichtbaar')">
+        <div class="knop-cirkel">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <span class="knop-label">Zichtbaar</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Popup: terug naar locatiekeuze -->
+  <div class="popup-overlay" id="popup-terug">
+    <div class="popup-kaart">
+      <div class="popup-icon">
+        <svg viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      </div>
+      <div class="popup-titel">Terug naar locatiekeuze</div>
+      <div class="popup-tekst">Je gaat terug naar de locatiekeuze. De huidige beoordeling wordt afgebroken en alle ingevoerde signalen worden gewist. Weet je het zeker?</div>
+      <div class="popup-knoppen">
+        <button class="popup-btn popup-btn-nee" onclick="sluitPopup('terug')">Nee</button>
+        <button class="popup-btn popup-btn-ja" onclick="bevestigTerug()">Ja</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup: terug naar beginscherm (home) -->
+  <div class="popup-overlay" id="popup-home">
+    <div class="popup-kaart">
+      <div class="popup-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div class="popup-titel">Beoordeling afsluiten</div>
+      <div class="popup-tekst">Je sluit de huidige Scherp Signaal beoordeling af. Alle ingevoerde signalen worden gewist en je keert terug naar het beginscherm. Weet je het zeker?</div>
+      <div class="popup-knoppen">
+        <button class="popup-btn popup-btn-nee" onclick="sluitPopup('home')">Nee</button>
+        <button class="popup-btn popup-btn-ja" onclick="bevestigHome()">Ja</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup: info / hoe werkt het -->
+  <div class="popup-overlay" id="popup-info" style="align-items:flex-end;padding:0;">
+    <div class="popup-kaart" style="max-width:100%;border-radius:24px 24px 0 0;padding:0;max-height:80vh;display:flex;flex-direction:column;">
+      <div style="background:var(--blauw);padding:16px 18px;border-radius:24px 24px 0 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:700;color:white;">Hoe werkt Scherp Signaal?</div>
+        <button onclick="sluitPopup('info')" style="width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.15);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:white;font-size:16px;transition:background .15s;" onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.15)'">✕</button>
+      </div>
+      <div style="overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 18px 28px;background:var(--grijs-licht);">
+        <div style="background:white;border-radius:14px;padding:16px 18px;margin-bottom:16px;border-left:4px solid var(--oranje);">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--oranje);margin-bottom:8px;">Wanneer gebruik je Scherp Signaal?</div>
+          <div style="font-size:13px;color:var(--tekst);line-height:1.7;">Gebruik Scherp Signaal op het moment dat je onderbuikgevoel zegt: hier klopt iets niet. Je ziet, hoort of merkt iets bij een jongere dat afwijkt, maar je kunt de situatie niet duiden. Of het nu uiteindelijk gaat om een onschuldige situatie of meerdere ernstige signalen, de app helpt om je waarnemingen scherp te krijgen. Twijfel je over de situatie? Dan is dit hét moment om Scherp Signaal te gebruiken.</div>
+        </div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:var(--blauw);margin-bottom:12px;">Hoe werkt Scherp Signaal?</div>
+        <div style="background:white;border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--blauw);color:white;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;flex-shrink:0;">1</div>
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--tekst);margin-bottom:4px;">Signalen benoemen</div>
+            <div style="font-size:13px;color:#374151;line-height:1.6;">Je swipet een signaal naar links als het niet zichtbaar is, naar rechts als het wel zichtbaar is, en omhoog als je het niet weet. Je kunt ook de knoppen onderaan gebruiken.</div>
+          </div>
+        </div>
+        <div style="background:white;border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--blauw);color:white;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;flex-shrink:0;">2</div>
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--tekst);margin-bottom:4px;">Risicobeoordeling</div>
+            <div style="font-size:13px;color:#374151;line-height:1.6;">Op basis van jouw ingevoerde signalen wordt een risicobeoordeling gegeven met één van de volgende opties: verwaarloosbaar, laag, gemiddeld, hoog of extreem hoog risico.</div>
+          </div>
+        </div>
+        <div style="background:white;border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--blauw);color:white;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;flex-shrink:0;">3</div>
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--tekst);margin-bottom:4px;">Advies en opvolging</div>
+            <div style="font-size:13px;color:#374151;line-height:1.6;">Op basis van de risicobeoordeling krijg je een passend advies met eventuele vervolgstappen.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+     SCHERM 5 — RESULTAAT
+══════════════════════════ -->
+<div id="s-resultaat" class="screen">
+  <div class="res-top">
+    <p class="res-label">Risicobeoordeling</p>
+    <div class="res-risico-naam" id="res-naam"></div>
+    <p class="res-risico-sub" id="res-sub"></p>
+    <div class="meter-wrap" id="meter-wrap"></div>
+  </div>
+  <div class="res-body">
+
+    <!-- Advies + disclaimer als één blok -->
+    <div id="advies-wrapper" style="margin-bottom:20px;border-radius:var(--r);overflow:hidden;">
+      <div class="advies-box" id="advies-box">
+        <div class="advies-titel" id="advies-titel"></div>
+        <div class="advies-tekst" id="advies-tekst"></div>
+      </div>
+      <div class="disclaimer-box" id="disclaimer-box">
+        <div class="disclaimer-label" id="disclaimer-label">Disclaimer</div>
+        <div class="disclaimer-tekst">De uitkomst van deze app is een hulpmiddel en geen definitief oordeel. Blijf altijd vertrouwen op je eigen professionele inschatting en onderbuikgevoel.<br><br>Heb je het gevoel dat er iets niet klopt, neem dit serieus. Ook als de risicobeoordeling laag uitvalt. In dat geval kan het alsnog verstandig zijn om de situatie te bespreken met een collega of contact op te nemen met de wijkagent of andere bevoegde instantie.</div>
+      </div>
+    </div>
+
+    <!-- Risico tellingen -->
+    <p class="sectie-label" style="margin-bottom:11px;">Gesignaleerde risico's</p>
+    <div class="niveau-samenvatting">
+      <div class="niveau-rij">
+        <div class="niveau-rij-dot" style="background:#86efac;"></div>
+        <div class="niveau-rij-label">Lage risico's zichtbaar</div>
+        <div class="niveau-rij-count" id="tel-laag" style="color:#15803d;">0</div>
+      </div>
+      <div class="niveau-rij">
+        <div class="niveau-rij-dot" style="background:#fde047;"></div>
+        <div class="niveau-rij-label">Gemiddelde risico's zichtbaar</div>
+        <div class="niveau-rij-count" id="tel-gem" style="color:#a16207;">0</div>
+      </div>
+      <div class="niveau-rij">
+        <div class="niveau-rij-dot" style="background:#fca5a5;"></div>
+        <div class="niveau-rij-label">Hoge risico's zichtbaar</div>
+        <div class="niveau-rij-count" id="tel-hoog" style="color:#b91c1c;">0</div>
+      </div>
+    </div>
+
+    <!-- Dropdown alle antwoorden -->
+    <div class="dropdown-wrap">
+      <div class="dropdown-toggle" onclick="toggleDropdown()">
+        <span class="dropdown-toggle-label">Alle beoordeelde signalen</span>
+        <span class="dropdown-toggle-pijl" id="dropdown-pijl">▼</span>
+      </div>
+      <div class="dropdown-inhoud" id="dropdown-inhoud"></div>
+    </div>
+
+    <button class="opnieuw-btn" onclick="opnieuwZelfdeOmgeving()">Opnieuw beoordelen</button>
+    <button class="andere-btn" onclick="volledigeReset()">Andere omgeving kiezen</button>
+
+    <div class="footer-logo">
+      <div style="width:26px;height:26px;border-radius:6px;background:var(--blauw);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:900;color:white;z-index:1;">S</span>
+        <div style="position:absolute;bottom:0;right:0;border-left:13px solid transparent;border-bottom:13px solid var(--oranje);"></div>
+      </div>
+      <div class="footer-naam">Scherp <em>Signaal</em></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /shell -->
+<script>
+/* ══════════════════════════════════════
+   ILLUSTRATIES — alle SVG scènes
+══════════════════════════════════════ */
+function maakIllu(type) {
+  const scenes = {
+    storend:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#fef3c7"/><rect x="30" y="110" width="60" height="8" rx="3" fill="#d97706" opacity=".4"/><rect x="130" y="110" width="60" height="8" rx="3" fill="#d97706" opacity=".4"/><rect x="230" y="110" width="60" height="8" rx="3" fill="#d97706" opacity=".4"/><ellipse cx="60" cy="95" rx="12" ry="12" fill="#92400e"/><rect x="50" y="107" width="20" height="25" rx="5" fill="#92400e" opacity=".7"/><ellipse cx="160" cy="95" rx="12" ry="12" fill="#78350f"/><rect x="150" y="107" width="20" height="25" rx="5" fill="#78350f" opacity=".7"/><ellipse cx="260" cy="78" rx="13" ry="13" fill="#b45309"/><rect x="249" y="91" width="22" height="30" rx="5" fill="#b45309" opacity=".85"/><line x1="249" y1="100" x2="233" y2="83" stroke="#b45309" stroke-width="5" stroke-linecap="round"/><line x1="271" y1="100" x2="287" y2="83" stroke="#b45309" stroke-width="5" stroke-linecap="round"/><ellipse cx="300" cy="58" rx="28" ry="16" fill="white" stroke="#d97706" stroke-width="2"/><polygon points="278,64 285,74 293,64" fill="white" stroke="#d97706" stroke-width="1.5"/><text x="300" y="63" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" font-weight="700" fill="#b45309">HEY!</text></svg>`,
+
+    beweeglijk:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#e0f2fe"/><rect x="0" y="140" width="340" height="45" fill="#bae6fd"/><rect x="0" y="138" width="340" height="4" fill="#7dd3fc"/><rect x="30" y="60" width="35" height="78" rx="3" fill="#0369a1" opacity=".35"/><rect x="130" y="60" width="35" height="78" rx="3" fill="#0369a1" opacity=".35"/><rect x="240" y="60" width="35" height="78" rx="3" fill="#0369a1" opacity=".35"/><circle cx="58" cy="99" r="3" fill="#0369a1" opacity=".6"/><circle cx="158" cy="99" r="3" fill="#0369a1" opacity=".6"/><circle cx="268" cy="99" r="3" fill="#0369a1" opacity=".6"/><path d="M60 140 Q120 120 180 140 Q240 160 300 135" stroke="#0284c7" stroke-width="2" stroke-dasharray="6,4" fill="none" opacity=".5"/><ellipse cx="195" cy="115" rx="13" ry="13" fill="#0369a1"/><rect x="184" y="128" width="22" height="28" rx="5" fill="#0369a1" opacity=".8"/><line x1="184" y1="148" x2="175" y2="162" stroke="#0369a1" stroke-width="5" stroke-linecap="round"/><line x1="206" y1="148" x2="212" y2="163" stroke="#0369a1" stroke-width="5" stroke-linecap="round"/><line x1="184" y1="134" x2="170" y2="126" stroke="#0369a1" stroke-width="4" stroke-linecap="round"/><rect x="158" y="119" width="13" height="18" rx="3" fill="#1e40af"/><line x1="158" y1="112" x2="140" y2="112" stroke="#0284c7" stroke-width="2" stroke-linecap="round" opacity=".5"/><line x1="160" y1="118" x2="138" y2="120" stroke="#0284c7" stroke-width="2" stroke-linecap="round" opacity=".4"/></svg>`,
+
+    politie:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#f1f5f9"/><rect x="0" y="130" width="340" height="55" fill="#cbd5e1"/><rect x="0" y="128" width="340" height="4" fill="#94a3b8"/><rect x="30" y="95" width="130" height="45" rx="7" fill="#1e40af"/><rect x="50" y="78" width="90" height="24" rx="6" fill="#1e40af" opacity=".8"/><rect x="55" y="82" width="35" height="17" rx="3" fill="#bfdbfe" opacity=".9"/><rect x="96" y="82" width="38" height="17" rx="3" fill="#bfdbfe" opacity=".9"/><circle cx="65" cy="140" r="12" fill="#1e293b"/><circle cx="65" cy="140" r="6" fill="#64748b"/><circle cx="140" cy="140" r="12" fill="#1e293b"/><circle cx="140" cy="140" r="6" fill="#64748b"/><text x="95" y="120" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" font-weight="700" fill="white" letter-spacing="1">POLITIE</text><rect x="68" y="74" width="50" height="8" rx="3" fill="#1e40af"/><rect x="70" y="75" width="20" height="5" rx="2" fill="#ef4444"/><rect x="96" y="75" width="20" height="5" rx="2" fill="#3b82f6"/><ellipse cx="240" cy="105" rx="12" ry="12" fill="#92400e"/><rect x="230" y="117" width="20" height="26" rx="5" fill="#92400e" opacity=".8"/><ellipse cx="270" cy="108" rx="11" ry="11" fill="#78350f"/><rect x="261" y="119" width="18" height="24" rx="5" fill="#78350f" opacity=".75"/><ellipse cx="298" cy="106" rx="11" ry="11" fill="#a16207"/><rect x="289" y="117" width="18" height="24" rx="5" fill="#a16207" opacity=".75"/></svg>`,
+
+    liegen:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#fce7f3"/><ellipse cx="90" cy="80" rx="15" ry="15" fill="#be185d" opacity=".7"/><rect x="77" y="95" width="26" height="38" rx="6" fill="#be185d" opacity=".6"/><line x1="77" y1="108" x2="55" y2="118" stroke="#be185d" stroke-width="5" stroke-linecap="round" opacity=".7"/><ellipse cx="55" cy="55" rx="35" ry="20" fill="white" stroke="#be185d" stroke-width="2"/><polygon points="60,73 55,83 72,75" fill="white" stroke="#be185d" stroke-width="1.5"/><text x="55" y="60" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" font-weight="700" fill="#be185d">Waar was</text><text x="55" y="72" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" font-weight="700" fill="#be185d">jij?</text><ellipse cx="250" cy="78" rx="14" ry="14" fill="#9d174d"/><rect x="238" y="92" width="24" height="36" rx="6" fill="#9d174d" opacity=".8"/><line x1="238" y1="102" x2="222" y2="95" stroke="#9d174d" stroke-width="5" stroke-linecap="round"/><line x1="262" y1="102" x2="278" y2="95" stroke="#9d174d" stroke-width="5" stroke-linecap="round"/><ellipse cx="295" cy="50" rx="35" ry="20" fill="white" stroke="#9d174d" stroke-width="2"/><polygon points="272,68 278,78 286,68" fill="white" stroke="#9d174d" stroke-width="1.5"/><text x="295" y="55" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="13" font-weight="700" fill="#9d174d">weet niet...</text><text x="295" y="67" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" fill="#be185d" opacity=".7">nergens...</text></svg>`,
+
+    geweld:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#fee2e2"/><rect x="0" y="148" width="340" height="37" fill="#fecaca"/><ellipse cx="130" cy="80" rx="15" ry="15" fill="#b91c1c"/><rect x="118" y="95" width="26" height="40" rx="6" fill="#b91c1c" opacity=".8"/><line x1="118" y1="105" x2="93" y2="98" stroke="#b91c1c" stroke-width="6" stroke-linecap="round"/><circle cx="90" cy="97" r="7" fill="#b91c1c"/><ellipse cx="220" cy="85" rx="13" ry="13" fill="#92400e"/><rect x="209" y="98" width="22" height="36" rx="6" fill="#92400e" opacity=".75"/><line x1="209" y1="105" x2="196" y2="90" stroke="#92400e" stroke-width="5" stroke-linecap="round"/><line x1="231" y1="105" x2="238" y2="90" stroke="#92400e" stroke-width="5" stroke-linecap="round"/><line x1="152" y1="88" x2="207" y2="88" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,3" opacity=".6"/><line x1="175" y1="78" x2="185" y2="70" stroke="#ef4444" stroke-width="2"/><line x1="182" y1="82" x2="192" y2="78" stroke="#ef4444" stroke-width="2"/></svg>`,
+
+    rondhangen:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#f0fdf4"/><rect x="0" y="0" width="340" height="90" fill="#dcfce7"/><rect x="0" y="88" width="340" height="4" fill="#86efac"/><rect x="20" y="20" width="30" height="65" rx="3" fill="#16a34a" opacity=".4"/><rect x="55" y="20" width="30" height="65" rx="3" fill="#16a34a" opacity=".35"/><rect x="90" y="20" width="30" height="65" rx="3" fill="#16a34a" opacity=".4"/><circle cx="48" cy="54" r="3" fill="white" opacity=".6"/><circle cx="83" cy="54" r="3" fill="white" opacity=".6"/><circle cx="118" cy="54" r="3" fill="white" opacity=".6"/><rect x="0" y="92" width="340" height="93" fill="#f0fdf4"/><ellipse cx="200" cy="115" rx="13" ry="13" fill="#15803d"/><rect x="189" y="128" width="22" height="32" rx="5" fill="#15803d" opacity=".8"/><ellipse cx="235" cy="118" rx="12" ry="12" fill="#166534"/><rect x="225" y="130" width="20" height="30" rx="5" fill="#166534" opacity=".8"/><ellipse cx="265" cy="116" rx="11" ry="11" fill="#14532d"/><rect x="256" y="127" width="18" height="28" rx="5" fill="#14532d" opacity=".75"/><circle cx="290" cy="40" r="20" fill="white" stroke="#16a34a" stroke-width="2"/><line x1="290" y1="28" x2="290" y2="40" stroke="#15803d" stroke-width="2.5"/><line x1="290" y1="40" x2="300" y2="46" stroke="#15803d" stroke-width="2"/><text x="290" y="68" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="#15803d" font-weight="600">les-tijd</text></svg>`,
+
+    teruggetrokken:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#ede9fe"/><ellipse cx="240" cy="95" rx="13" ry="13" fill="#7c3aed" opacity=".6"/><rect x="229" y="108" width="22" height="32" rx="5" fill="#7c3aed" opacity=".5"/><ellipse cx="272" cy="92" rx="12" ry="12" fill="#6d28d9" opacity=".6"/><rect x="262" y="104" width="20" height="30" rx="5" fill="#6d28d9" opacity=".5"/><ellipse cx="302" cy="96" rx="11" ry="11" fill="#5b21b6" opacity=".6"/><rect x="293" y="107" width="18" height="28" rx="5" fill="#5b21b6" opacity=".5"/><ellipse cx="272" cy="65" rx="38" ry="16" fill="white" stroke="#7c3aed" stroke-width="1.5" opacity=".8"/><polygon points="262,79 268,89 278,79" fill="white" stroke="#7c3aed" stroke-width="1.5"/><text x="272" y="70" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" fill="#7c3aed">haha!</text><line x1="195" y1="55" x2="195" y2="160" stroke="#7c3aed" stroke-width="2" stroke-dasharray="6,4" opacity=".4"/><ellipse cx="100" cy="95" rx="14" ry="14" fill="#4c1d95"/><rect x="88" y="109" width="24" height="34" rx="6" fill="#4c1d95" opacity=".8"/><path d="M88 118 Q80 125 85 132" stroke="#4c1d95" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M112 118 Q120 125 115 132" stroke="#4c1d95" stroke-width="5" stroke-linecap="round" fill="none"/><ellipse cx="60" cy="68" rx="30" ry="16" fill="white" stroke="#4c1d95" stroke-width="1.5" opacity=".7"/><circle cx="75" cy="84" r="4" fill="white" stroke="#4c1d95" stroke-width="1.5" opacity=".7"/><circle cx="83" cy="92" r="3" fill="white" stroke="#4c1d95" stroke-width="1.5" opacity=".7"/><text x="60" y="73" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" fill="#4c1d95">...</text></svg>`,
+
+    kleding:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#fef9c3"/><rect x="0" y="145" width="340" height="40" fill="#fde047" opacity=".3"/><ellipse cx="170" cy="65" rx="18" ry="18" fill="#92400e"/><path d="M145 90 Q148 83 170 80 Q192 83 195 90 L198 135 Q170 142 142 135 Z" fill="#1e40af"/><circle cx="170" cy="105" r="8" fill="white" opacity=".9"/><text x="170" y="109" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="8" font-weight="900" fill="#1e40af">N</text><rect x="140" y="150" width="30" height="14" rx="5" fill="#dc2626" opacity=".85"/><rect x="143" y="148" width="20" height="7" rx="4" fill="white" opacity=".9"/><rect x="170" y="150" width="30" height="14" rx="5" fill="#dc2626" opacity=".85"/><rect x="173" y="148" width="20" height="7" rx="4" fill="white" opacity=".9"/><rect x="215" y="78" width="55" height="28" rx="6" fill="white" stroke="#a16207" stroke-width="1.5"/><line x1="215" y1="86" x2="200" y2="96" stroke="#a16207" stroke-width="1.5" stroke-dasharray="3,2"/><text x="242" y="92" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" font-weight="700" fill="#a16207">€ 280,-</text><text x="242" y="102" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="#92400e">Nike / Supreme</text></svg>`,
+
+    socialmedia:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#e0f2fe"/><ellipse cx="130" cy="80" rx="16" ry="16" fill="#0369a1"/><rect x="117" y="96" width="26" height="38" rx="6" fill="#0369a1" opacity=".8"/><line x1="117" y1="108" x2="95" y2="100" stroke="#0369a1" stroke-width="6" stroke-linecap="round"/><rect x="75" y="88" width="22" height="35" rx="5" fill="#1e293b"/><rect x="78" y="92" width="16" height="26" rx="3" fill="#38bdf8"/><text x="86" y="103" text-anchor="middle" font-size="8" fill="white">♥ 42</text><text x="86" y="113" text-anchor="middle" font-size="7" fill="#bae6fd">dm</text><ellipse cx="86" cy="110" rx="20" ry="22" fill="#38bdf8" opacity=".12"/><circle cx="55" cy="75" r="12" fill="#0ea5e9" opacity=".25"/><text x="55" y="80" text-anchor="middle" font-size="10" fill="#0369a1">+3</text><circle cx="45" cy="105" r="10" fill="#0ea5e9" opacity=".2"/><text x="45" y="109" text-anchor="middle" font-size="9" fill="#0369a1">♥</text></svg>`,
+
+    verzuim:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#fff7ed"/><rect x="15" y="60" width="120" height="100" rx="4" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/><rect x="15" y="60" width="120" height="28" rx="4" fill="#ea580c" opacity=".6"/><text x="75" y="79" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" font-weight="700" fill="white">SCHOOL</text><rect x="30" y="100" width="25" height="22" rx="3" fill="#bfdbfe" stroke="#ea580c" stroke-width="1.5"/><rect x="75" y="100" width="25" height="22" rx="3" fill="#bfdbfe" stroke="#ea580c" stroke-width="1.5"/><rect x="52" y="133" width="22" height="27" rx="3" fill="#fdba74"/><rect x="155" y="50" width="80" height="100" rx="5" fill="white" stroke="#ea580c" stroke-width="1.5"/><text x="195" y="66" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" font-weight="700" fill="#ea580c">AANWEZIG</text><text x="165" y="83" font-family="'Barlow',sans-serif" font-size="9" fill="#374151">Jan</text><text x="225" y="83" font-family="'Barlow',sans-serif" font-size="11" fill="#16a34a">✓</text><text x="165" y="96" font-family="'Barlow',sans-serif" font-size="9" fill="#374151">Sara</text><text x="225" y="96" font-family="'Barlow',sans-serif" font-size="11" fill="#16a34a">✓</text><text x="165" y="109" font-family="'Barlow',sans-serif" font-size="9" fill="#374151">Mo</text><text x="225" y="109" font-family="'Barlow',sans-serif" font-size="13" fill="#dc2626">✗</text><text x="165" y="122" font-family="'Barlow',sans-serif" font-size="9" fill="#374151">Amy</text><text x="225" y="122" font-family="'Barlow',sans-serif" font-size="11" fill="#16a34a">✓</text><ellipse cx="295" cy="100" rx="14" ry="14" fill="#c2410c"/><rect x="283" y="114" width="24" height="36" rx="5" fill="#c2410c" opacity=".8"/></svg>`,
+
+    prestaties:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#f0fdf4"/><rect x="30" y="25" width="130" height="145" rx="6" fill="white" stroke="#16a34a" stroke-width="2"/><rect x="30" y="25" width="130" height="30" rx="6" fill="#16a34a" opacity=".7"/><text x="95" y="45" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" font-weight="700" fill="white">RAPPORT</text><text x="42" y="72" font-family="'Barlow',sans-serif" font-size="10" fill="#374151">Nederlands</text><text x="143" y="72" text-anchor="end" font-family="'Barlow Condensed',sans-serif" font-size="13" font-weight="700" fill="#15803d">8.2</text><text x="42" y="88" font-family="'Barlow',sans-serif" font-size="10" fill="#374151">Wiskunde</text><text x="143" y="88" text-anchor="end" font-family="'Barlow Condensed',sans-serif" font-size="13" font-weight="700" fill="#ca8a04">5.8</text><text x="42" y="104" font-family="'Barlow',sans-serif" font-size="10" fill="#374151">Engels</text><text x="143" y="104" text-anchor="end" font-family="'Barlow Condensed',sans-serif" font-size="13" font-weight="700" fill="#dc2626">3.5</text><rect x="190" y="40" width="120" height="110" rx="6" fill="white" stroke="#16a34a" stroke-width="1.5" opacity=".5"/><polyline points="205,70 225,75 245,90 265,110 285,140" stroke="#dc2626" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="205" cy="70" r="4" fill="#16a34a"/><circle cx="285" cy="140" r="4" fill="#dc2626"/><text x="250" y="165" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="#dc2626" font-weight="600">dalende trend</text></svg>`,
+
+    agressie:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#fee2e2"/><rect x="0" y="148" width="340" height="37" fill="#fecaca"/><rect x="100" y="125" width="140" height="7" rx="3" fill="#b91c1c" opacity=".3"/><ellipse cx="160" cy="82" rx="14" ry="14" fill="#b91c1c"/><rect x="148" y="96" width="24" height="36" rx="6" fill="#b91c1c" opacity=".8"/><line x1="148" y1="108" x2="127" y2="96" stroke="#b91c1c" stroke-width="5" stroke-linecap="round"/><line x1="172" y1="108" x2="193" y2="96" stroke="#b91c1c" stroke-width="5" stroke-linecap="round"/><line x1="150" y1="72" x2="155" y2="65" stroke="#b91c1c" stroke-width="2.5"/><line x1="160" y1="70" x2="160" y2="62" stroke="#b91c1c" stroke-width="2.5"/><line x1="170" y1="72" x2="165" y2="65" stroke="#b91c1c" stroke-width="2.5"/><ellipse cx="255" cy="87" rx="13" ry="13" fill="#991b1b" opacity=".6"/><rect x="244" y="100" width="22" height="32" rx="5" fill="#991b1b" opacity=".5"/><ellipse cx="60" cy="85" rx="13" ry="13" fill="#be185d" opacity=".5"/><rect x="49" y="98" width="22" height="30" rx="5" fill="#be185d" opacity=".4"/></svg>`,
+
+    geenhulp:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#f5f3ff"/><ellipse cx="90" cy="82" rx="15" ry="15" fill="#6d28d9" opacity=".6"/><rect x="78" y="97" width="26" height="38" rx="6" fill="#6d28d9" opacity=".5"/><line x1="104" y1="110" x2="125" y2="108" stroke="#6d28d9" stroke-width="5" stroke-linecap="round" opacity=".6"/><ellipse cx="75" cy="52" rx="50" ry="22" fill="white" stroke="#6d28d9" stroke-width="2" opacity=".9"/><polygon points="85,72 82,82 95,72" fill="white" stroke="#6d28d9" stroke-width="1.5"/><text x="75" y="57" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" font-weight="700" fill="#6d28d9">Kan ik je</text><text x="75" y="68" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" font-weight="700" fill="#6d28d9">helpen?</text><ellipse cx="255" cy="80" rx="14" ry="14" fill="#4c1d95"/><rect x="243" y="94" width="24" height="38" rx="6" fill="#4c1d95" opacity=".8"/><path d="M243 108 Q250 113 258 108" stroke="#4c1d95" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M258 108 Q266 113 275 108" stroke="#4c1d95" stroke-width="5" stroke-linecap="round" fill="none"/><ellipse cx="295" cy="52" rx="38" ry="19" fill="white" stroke="#4c1d95" stroke-width="2"/><polygon points="268,69 275,79 283,69" fill="white" stroke="#4c1d95" stroke-width="1.5"/><text x="295" y="57" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" font-weight="700" fill="#4c1d95">Laat maar.</text><text x="295" y="68" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" fill="#6d28d9" opacity=".8">Regel ik zelf.</text></svg>`,
+
+    bereikbaar:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#0f172a"/><path d="M280 25 Q260 45 280 65 Q295 45 280 25" fill="#fbbf24" opacity=".7"/><circle cx="60" cy="30" r="3" fill="white" opacity=".7"/><circle cx="130" cy="18" r="2" fill="white" opacity=".6"/><circle cx="200" cy="28" r="2" fill="white" opacity=".5"/><rect x="20" y="90" width="180" height="85" rx="8" fill="#1e293b"/><rect x="20" y="90" width="180" height="25" rx="8" fill="#334155"/><rect x="35" y="93" width="55" height="30" rx="8" fill="#475569"/><ellipse cx="130" cy="105" rx="15" ry="13" fill="#92400e"/><rect x="100" y="115" width="70" height="55" rx="5" fill="#334155"/><rect x="118" y="98" width="18" height="28" rx="4" fill="#1e293b"/><rect x="120" y="101" width="14" height="21" rx="2" fill="#38bdf8"/><ellipse cx="127" cy="112" rx="18" ry="20" fill="#38bdf8" opacity=".15"/><text x="152" y="115" font-family="'Barlow Condensed',sans-serif" font-size="13" font-weight="700" fill="#fbbf24">02:47</text><rect x="218" y="70" width="100" height="28" rx="7" fill="#1d4ed8" opacity=".9"/><text x="268" y="88" text-anchor="middle" font-family="'Barlow',sans-serif" font-size="10" fill="white">Nieuw bericht (1)</text><rect x="218" y="103" width="100" height="28" rx="7" fill="#1d4ed8" opacity=".8"/><text x="268" y="121" text-anchor="middle" font-family="'Barlow',sans-serif" font-size="10" fill="white">Nieuw bericht (1)</text><rect x="218" y="136" width="100" height="28" rx="7" fill="#1d4ed8" opacity=".7"/><text x="268" y="154" text-anchor="middle" font-family="'Barlow',sans-serif" font-size="10" fill="white">Bel me nu</text></svg>`,
+
+    leefstijl:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#fef9c3"/><rect x="0" y="130" width="340" height="55" fill="#fde047" opacity=".3"/><rect x="120" y="118" width="100" height="8" rx="4" fill="#a16207" opacity=".5"/><rect x="164" y="88" width="6" height="30" rx="3" fill="#fbbf24"/><ellipse cx="167" cy="85" rx="5" ry="7" fill="#fb923c" opacity=".8"/><ellipse cx="170" cy="70" rx="15" ry="15" fill="#92400e"/><path d="M148 95 Q152 88 170 85 Q188 88 192 95 L195 130 Q170 136 145 130 Z" fill="#1e3a5f"/><polygon points="168,87 172,87 173,110 167,110" fill="#dc2626" opacity=".8"/><rect x="30" y="55" width="65" height="35" rx="5" fill="white" stroke="#a16207" stroke-width="1.5"/><text x="62" y="70" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" font-weight="700" fill="#a16207">Horloge</text><text x="62" y="82" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" font-weight="800" fill="#92400e">€4.500</text><rect x="245" y="55" width="65" height="35" rx="5" fill="white" stroke="#a16207" stroke-width="1.5"/><text x="277" y="70" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" font-weight="700" fill="#a16207">Vakantie</text><text x="277" y="82" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" font-weight="700" fill="#92400e">business</text></svg>`,
+
+    telefoons:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#dbeafe"/><ellipse cx="170" cy="72" rx="16" ry="16" fill="#1d4ed8"/><rect x="157" y="88" width="26" height="42" rx="6" fill="#1d4ed8" opacity=".8"/><line x1="157" y1="100" x2="128" y2="92" stroke="#1d4ed8" stroke-width="6" stroke-linecap="round"/><rect x="108" y="80" width="22" height="36" rx="5" fill="#1e293b"/><rect x="111" y="84" width="16" height="26" rx="3" fill="#38bdf8"/><line x1="183" y1="100" x2="212" y2="92" stroke="#1d4ed8" stroke-width="6" stroke-linecap="round"/><rect x="210" y="80" width="20" height="34" rx="4" fill="#374151"/><rect x="213" y="84" width="14" height="22" rx="2" fill="#94a3b8"/><rect x="70" y="120" width="70" height="22" rx="5" fill="#1d4ed8" opacity=".2" stroke="#1d4ed8" stroke-width="1"/><text x="105" y="135" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="#1d4ed8" font-weight="700">Privé telefoon</text><rect x="205" y="120" width="70" height="22" rx="5" fill="#374151" opacity=".2" stroke="#374151" stroke-width="1"/><text x="240" y="135" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="#374151" font-weight="700">"Werk" telefoon</text></svg>`,
+
+    dealers:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#fce7f3"/><ellipse cx="270" cy="75" rx="16" ry="16" fill="#9d174d"/><path d="M252 100 Q255 93 270 90 Q285 93 288 100 L290 135 Q270 140 250 135 Z" fill="#1e3a5f"/><rect x="288" y="82" width="28" height="15" rx="3" fill="#16a34a" opacity=".9" transform="rotate(-15 302 90)"/><rect x="292" y="78" width="28" height="15" rx="3" fill="#15803d" opacity=".8" transform="rotate(-5 306 86)"/><ellipse cx="80" cy="90" rx="13" ry="13" fill="#be185d" opacity=".6"/><rect x="69" y="103" width="22" height="30" rx="5" fill="#be185d" opacity=".5"/><ellipse cx="115" cy="87" rx="12" ry="12" fill="#9d174d" opacity=".6"/><rect x="105" y="99" width="20" height="28" rx="5" fill="#9d174d" opacity=".5"/><text x="80" y="70" text-anchor="middle" font-size="14" fill="#be185d" opacity=".8">★</text><text x="115" y="65" text-anchor="middle" font-size="12" fill="#9d174d" opacity=".8">★</text><ellipse cx="115" cy="50" rx="45" ry="16" fill="white" stroke="#be185d" stroke-width="1.5" opacity=".9"/><text x="115" y="55" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" fill="#9d174d">"Hij regelt het"</text></svg>`,
+
+    geld:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#fef9c3"/><rect x="20" y="35" width="130" height="130" rx="8" fill="white" stroke="#a16207" stroke-width="1.5"/><text x="85" y="55" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" font-weight="700" fill="#a16207">GISTEREN</text><ellipse cx="85" cy="90" rx="14" ry="14" fill="#92400e" opacity=".6"/><rect x="73" y="104" width="24" height="35" rx="5" fill="#92400e" opacity=".5"/><text x="80" y="122" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" fill="#92400e">leeg</text><rect x="190" y="35" width="130" height="130" rx="8" fill="white" stroke="#a16207" stroke-width="1.5"/><text x="255" y="55" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" font-weight="700" fill="#a16207">VANDAAG</text><ellipse cx="255" cy="88" rx="14" ry="14" fill="#92400e"/><rect x="243" y="102" width="24" height="36" rx="5" fill="#92400e" opacity=".8"/><rect x="265" y="76" width="30" height="16" rx="4" fill="#16a34a" transform="rotate(-20 280 84)"/><rect x="270" y="72" width="30" height="16" rx="4" fill="#15803d" opacity=".85" transform="rotate(-5 285 80)"/><line x1="155" y1="100" x2="185" y2="100" stroke="#a16207" stroke-width="3"/><polygon points="183,95 192,100 183,105" fill="#a16207"/><text x="170" y="93" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="#a16207">plotseling</text></svg>`,
+
+    cash:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#d1fae5"/><rect x="180" y="80" width="140" height="90" rx="5" fill="#a7f3d0" opacity=".5"/><rect x="180" y="80" width="140" height="25" rx="5" fill="#059669" opacity=".4"/><text x="250" y="97" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" font-weight="700" fill="white">KASSA</text><ellipse cx="250" cy="127" rx="12" ry="12" fill="#065f46" opacity=".6"/><rect x="240" y="139" width="20" height="28" rx="5" fill="#065f46" opacity=".5"/><ellipse cx="95" cy="90" rx="15" ry="15" fill="#065f46"/><rect x="82" y="105" width="26" height="38" rx="6" fill="#065f46" opacity=".8"/><line x1="108" y1="115" x2="135" y2="108" stroke="#065f46" stroke-width="6" stroke-linecap="round"/><rect x="133" y="96" width="42" height="20" rx="4" fill="#16a34a" transform="rotate(-8 154 106)"/><rect x="135" y="100" width="42" height="20" rx="4" fill="#15803d" transform="rotate(-2 156 110)"/><rect x="133" y="104" width="42" height="20" rx="4" fill="#166534" transform="rotate(6 154 114)"/><text x="155" y="108" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" font-weight="700" fill="white" transform="rotate(-2 155 108)">€ 500</text></svg>`,
+
+    verslaving:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#fee2e2"/><ellipse cx="170" cy="78" rx="16" ry="16" fill="#991b1b"/><rect x="158" y="94" width="24" height="40" rx="6" fill="#991b1b" opacity=".75"/><line x1="158" y1="108" x2="130" y2="105" stroke="#991b1b" stroke-width="5" stroke-linecap="round"/><line x1="182" y1="108" x2="210" y2="103" stroke="#991b1b" stroke-width="5" stroke-linecap="round"/><path d="M165 62 Q170 52 175 58 Q180 65 170 68 Q163 68 162 60" stroke="#dc2626" stroke-width="2" fill="none" opacity=".7"/><rect x="30" y="90" width="35" height="50" rx="4" fill="white" stroke="#dc2626" stroke-width="2"/><text x="47" y="120" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="18" font-weight="700" fill="#dc2626">♠</text><polygon points="280,75 310,130 250,130" fill="#fbbf24" stroke="#d97706" stroke-width="2"/><text x="280" y="118" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="22" font-weight="900" fill="#92400e">!</text></svg>`,
+
+    druk:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#fee2e2"/><ellipse cx="90" cy="72" rx="19" ry="19" fill="#7f1d1d"/><rect x="74" y="91" width="32" height="48" rx="7" fill="#7f1d1d" opacity=".85"/><line x1="106" y1="108" x2="165" y2="105" stroke="#7f1d1d" stroke-width="7" stroke-linecap="round"/><ellipse cx="215" cy="85" rx="13" ry="13" fill="#b91c1c" opacity=".7"/><rect x="204" y="98" width="22" height="32" rx="5" fill="#b91c1c" opacity=".6"/><line x1="204" y1="108" x2="193" y2="100" stroke="#b91c1c" stroke-width="4" stroke-linecap="round" opacity=".7"/><line x1="226" y1="108" x2="234" y2="100" stroke="#b91c1c" stroke-width="4" stroke-linecap="round" opacity=".7"/><ellipse cx="95" cy="42" rx="55" ry="20" fill="white" stroke="#7f1d1d" stroke-width="2"/><polygon points="95,60 88,72 105,62" fill="white" stroke="#7f1d1d" stroke-width="1.5"/><text x="95" y="47" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" font-weight="700" fill="#7f1d1d">Je doet dit</text><text x="95" y="59" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" font-weight="700" fill="#7f1d1d">gewoon voor ons.</text><ellipse cx="275" cy="58" rx="40" ry="18" fill="white" stroke="#b91c1c" stroke-width="1.5" opacity=".8"/><polygon points="220,74 228,82 233,74" fill="white" stroke="#b91c1c" stroke-width="1.5"/><text x="275" y="63" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" fill="#b91c1c">Ik wil dit</text><text x="275" y="74" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" fill="#b91c1c">niet...</text></svg>`,
+
+    nacht:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#0f172a"/><circle cx="50" cy="25" r="2" fill="white" opacity=".7"/><circle cx="110" cy="15" r="1.5" fill="white" opacity=".6"/><circle cx="170" cy="22" r="2" fill="white" opacity=".5"/><circle cx="230" cy="12" r="1.5" fill="white" opacity=".6"/><circle cx="310" cy="30" r="2" fill="white" opacity=".7"/><path d="M280 18 Q262 35 280 52 Q294 35 280 18" fill="#fbbf24" opacity=".6"/><rect x="58" y="55" width="5" height="110" fill="#475569"/><ellipse cx="60" cy="55" rx="20" ry="7" fill="#fbbf24" opacity=".4"/><circle cx="120" cy="150" r="18" fill="#334155"/><circle cx="120" cy="150" r="10" fill="#475569"/><circle cx="210" cy="150" r="18" fill="#334155"/><circle cx="210" cy="150" r="10" fill="#475569"/><rect x="100" y="115" width="120" height="42" rx="8" fill="#1e40af" opacity=".8"/><rect x="125" y="105" width="55" height="20" rx="6" fill="#1d4ed8" opacity=".7"/><ellipse cx="160" cy="100" rx="13" ry="13" fill="#334155"/><rect x="148" y="113" width="22" height="28" rx="5" fill="#334155" opacity=".8"/><rect x="215" y="60" width="100" height="32" rx="7" fill="#1e293b" stroke="#fbbf24" stroke-width="1.5"/><text x="265" y="72" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" font-weight="700" fill="#fbbf24">03:15</text><text x="265" y="84" text-anchor="middle" font-family="'Barlow',sans-serif" font-size="9" fill="#94a3b8">"bezorgwerk"</text></svg>`,
+
+    verwonding:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#fee2e2"/><ellipse cx="150" cy="72" rx="17" ry="17" fill="#b91c1c" opacity=".8"/><rect x="136" y="89" width="28" height="45" rx="7" fill="#b91c1c" opacity=".7"/><line x1="136" y1="103" x2="100" y2="118" stroke="#b91c1c" stroke-width="7" stroke-linecap="round"/><rect x="88" y="112" width="32" height="16" rx="6" fill="white" stroke="#dc2626" stroke-width="2"/><line x1="100" y1="116" x2="108" y2="122" stroke="#dc2626" stroke-width="2"/><line x1="108" y1="116" x2="100" y2="122" stroke="#dc2626" stroke-width="2"/><ellipse cx="142" cy="78" rx="7" ry="5" fill="#7c3aed" opacity=".5"/><ellipse cx="265" cy="78" rx="14" ry="14" fill="#be185d" opacity=".6"/><rect x="253" y="92" width="24" height="34" rx="6" fill="#be185d" opacity=".5"/><ellipse cx="285" cy="50" rx="45" ry="19" fill="white" stroke="#be185d" stroke-width="2"/><polygon points="260,67 267,77 275,67" fill="white" stroke="#be185d" stroke-width="1.5"/><text x="285" y="55" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" font-weight="700" fill="#be185d">Wat is er</text><text x="285" y="66" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" font-weight="700" fill="#be185d">gebeurd?</text><ellipse cx="95" cy="45" rx="40" ry="17" fill="white" stroke="#b91c1c" stroke-width="1.5"/><polygon points="115,60 122,70 130,60" fill="white" stroke="#b91c1c" stroke-width="1.5"/><text x="95" y="50" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" fill="#b91c1c">gevallen...</text></svg>`,
+
+    weggaan:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#e0f2fe"/><rect x="15" y="85" width="150" height="90" rx="6" fill="#bae6fd" opacity=".5"/><rect x="15" y="85" width="150" height="22" rx="6" fill="#0284c7" opacity=".4"/><rect x="25" y="92" width="45" height="22" rx="5" fill="#7dd3fc" opacity=".6"/><circle cx="170" cy="50" r="22" fill="white" stroke="#0284c7" stroke-width="2"/><line x1="170" y1="38" x2="170" y2="50" stroke="#0369a1" stroke-width="2.5"/><line x1="170" y1="50" x2="182" y2="54" stroke="#0369a1" stroke-width="2"/><text x="170" y="82" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" fill="#0284c7">02:00</text><ellipse cx="260" cy="85" rx="14" ry="14" fill="#0369a1"/><rect x="248" y="99" width="24" height="40" rx="6" fill="#0369a1" opacity=".8"/><line x1="248" y1="112" x2="232" y2="105" stroke="#0369a1" stroke-width="5" stroke-linecap="round"/><line x1="272" y1="112" x2="288" y2="104" stroke="#0369a1" stroke-width="5" stroke-linecap="round"/><rect x="295" y="65" width="35" height="75" rx="3" fill="#0284c7" opacity=".3" stroke="#0369a1" stroke-width="1.5"/></svg>`,
+
+    criminelen:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#1c1917"/><rect x="0" y="148" width="340" height="37" fill="#292524"/><rect x="15" y="108" width="160" height="50" rx="8" fill="#292524" stroke="#44403c" stroke-width="2"/><rect x="35" y="90" width="120" height="28" rx="7" fill="#1c1917" stroke="#44403c" stroke-width="1.5"/><ellipse cx="50" cy="158" rx="14" ry="14" fill="#0c0a09"/><circle cx="50" cy="158" r="7" fill="#292524"/><ellipse cx="150" cy="158" rx="14" ry="14" fill="#0c0a09"/><circle cx="150" cy="158" r="7" fill="#292524"/><ellipse cx="230" cy="90" rx="18" ry="18" fill="#44403c"/><rect x="215" y="108" width="30" height="50" rx="7" fill="#44403c" opacity=".9"/><line x1="215" y1="120" x2="190" y2="118" stroke="#44403c" stroke-width="7" stroke-linecap="round"/><ellipse cx="175" cy="95" rx="13" ry="13" fill="#78716c"/><rect x="164" y="108" width="22" height="36" rx="5" fill="#78716c" opacity=".8"/><rect x="195" y="112" width="22" height="12" rx="3" fill="#16a34a" opacity=".8"/><rect x="295" y="45" width="4" height="120" fill="#44403c"/><ellipse cx="297" cy="45" rx="16" ry="5" fill="#fbbf24" opacity=".3"/></svg>`,
+
+    wapen:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#450a0a"/><ellipse cx="170" cy="72" rx="17" ry="17" fill="#7f1d1d"/><path d="M148 97 Q152 90 170 87 Q188 90 192 97 L195 148 Q170 155 145 148 Z" fill="#1c1917"/><ellipse cx="170" cy="120" rx="25" ry="30" fill="#dc2626" opacity=".08"/><polygon points="80,155 110,100 140,155" fill="#fbbf24" stroke="#d97706" stroke-width="2.5"/><text x="110" y="143" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="24" font-weight="900" fill="#92400e">!</text><rect x="190" y="105" width="130" height="55" rx="8" fill="#7f1d1d" stroke="#dc2626" stroke-width="2"/><text x="255" y="125" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" font-weight="700" fill="#fca5a5">ACUUT</text><text x="255" y="139" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" font-weight="700" fill="#fca5a5">VEILIGHEIDSSIGNAAL</text><text x="255" y="152" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" fill="#f87171">Bel 112</text></svg>`,
+
+    drugs:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#14532d"/><ellipse cx="105" cy="85" rx="15" ry="15" fill="#166534"/><rect x="93" y="100" width="24" height="40" rx="6" fill="#166534" opacity=".8"/><line x1="117" y1="112" x2="145" y2="110" stroke="#166534" stroke-width="6" stroke-linecap="round"/><rect x="143" y="103" width="16" height="14" rx="3" fill="#f0fdf4" opacity=".9"/><rect x="163" y="104" width="16" height="14" rx="3" fill="#dcfce7" opacity=".85"/><ellipse cx="235" cy="85" rx="14" ry="14" fill="#15803d"/><rect x="223" y="99" width="24" height="40" rx="6" fill="#15803d" opacity=".8"/><line x1="223" y1="110" x2="182" y2="109" stroke="#15803d" stroke-width="6" stroke-linecap="round"/><rect x="143" y="122" width="36" height="14" rx="3" fill="#16a34a" transform="rotate(5 161 129)"/><text x="161" y="132" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" font-weight="700" fill="white" transform="rotate(5 161 132)">€€€</text><polygon points="290,50 315,95 265,95" fill="#dc2626" opacity=".8"/><text x="290" y="83" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="20" font-weight="900" fill="white">!</text></svg>`,
+
+    muziek:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#1e1b4b"/><circle cx="60" cy="30" r="2" fill="white" opacity=".5"/><circle cx="120" cy="18" r="1.5" fill="white" opacity=".4"/><circle cx="280" cy="25" r="2" fill="white" opacity=".5"/><ellipse cx="170" cy="92" rx="60" ry="60" fill="#312e81" opacity=".6"/><ellipse cx="170" cy="92" rx="40" ry="40" fill="#1e1b4b"/><ellipse cx="170" cy="92" rx="8" ry="8" fill="#4338ca"/><path d="M190 55 L200 45 L210 48 L200 58 Z" fill="#818cf8"/><path d="M200 58 L200 85 Q196 88 192 85 L192 62 Z" fill="#818cf8"/><ellipse cx="195" cy="87" rx="8" ry="5" fill="#4338ca"/><path d="M215 48 L225 38 L235 41 L225 51 Z" fill="#a5b4fc"/><path d="M225 51 L225 78 Q221 81 217 78 L217 55 Z" fill="#a5b4fc"/><ellipse cx="220" cy="80" rx="8" ry="5" fill="#3730a3"/><ellipse cx="170" cy="92" rx="60" ry="60" fill="none" stroke="#4338ca" stroke-width="2"/><ellipse cx="170" cy="92" rx="42" ry="42" fill="none" stroke="#4338ca" stroke-width="1" opacity=".5"/><ellipse cx="95" cy="78" rx="14" ry="14" fill="#4338ca"/><rect x="83" y="92" width="24" height="36" rx="6" fill="#4338ca" opacity=".8"/><rect x="65" y="62" width="28" height="45" rx="8" fill="#1e293b" stroke="#818cf8" stroke-width="1.5"/><rect x="68" y="66" width="22" height="35" rx="5" fill="#312e81"/><line x1="72" y1="76" x2="84" y2="76" stroke="#818cf8" stroke-width="1.5"/><line x1="72" y1="82" x2="84" y2="82" stroke="#818cf8" stroke-width="1"/><line x1="72" y1="88" x2="80" y2="88" stroke="#818cf8" stroke-width="1"/><rect x="110" y="148" width="120" height="26" rx="8" fill="#312e81" stroke="#4338ca" stroke-width="1.5"/><text x="170" y="165" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="10" font-weight="700" fill="#a5b4fc">verheerlijkende muziek</text></svg>`,
+
+    media:`<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#1c1917"/><rect x="15" y="30" width="145" height="100" rx="6" fill="#292524" stroke="#78716c" stroke-width="1.5"/><rect x="20" y="35" width="135" height="88" rx="4" fill="#1c1917"/><rect x="25" y="40" width="60" height="78" rx="3" fill="#292524"/><ellipse cx="55" cy="62" rx="18" ry="18" fill="#dc2626" opacity=".7"/><text x="55" y="67" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="13" font-weight="900" fill="white">$</text><text x="55" y="98" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="7" fill="#a8a29e">poster</text><rect x="92" y="40" width="58" height="78" rx="3" fill="#292524"/><ellipse cx="121" cy="60" rx="16" ry="16" fill="#7f1d1d" opacity=".8"/><text x="121" y="65" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" font-weight="900" fill="white">♛</text><text x="121" y="98" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="7" fill="#a8a29e">decoratie</text><rect x="175" y="30" width="145" height="100" rx="6" fill="#292524" stroke="#78716c" stroke-width="1.5"/><rect x="180" y="38" width="130" height="84" rx="4" fill="#1c1917"/><rect x="185" y="43" width="55" height="72" rx="3" fill="#1e293b"/><text x="212" y="72" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="22" font-weight="900" fill="#dc2626">★</text><text x="212" y="90" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="7" fill="#a8a29e">banner</text><rect x="248" y="43" width="55" height="72" rx="3" fill="#292524"/><text x="275" y="68" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="11" font-weight="700" fill="#fbbf24">GANG</text><text x="275" y="80" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="#a16207">life</text><text x="275" y="96" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="7" fill="#a8a29e">sticker</text><ellipse cx="170" cy="155" rx="80" ry="14" fill="#292524" opacity=".5"/><text x="170" y="160" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="9" fill="#a8a29e" font-weight="600">criminaliteit verheerlijkende media</text></svg>`
+  };
+  return scenes[type] || `<svg viewBox="0 0 340 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="340" height="185" fill="#e5e7eb"/></svg>`;
+}
+
+/* ══════════════════════════════════════
+   SIGNALEN DATA — hernummerd, punten gekoppeld
+   niveau -> punten: laag=1, gemiddeld=5, hoog=15
+   schoolOnly: true = alleen school
+   sportSchool: true = school + sport, niet straat
+══════════════════════════════════════ */
+const ALLE_SIGNALEN = [
+  {id:1,  titel:'Storend gedrag',             niveau:'laag',     punten:1,  schoolOnly:false, sportSchool:false, illu:'storend',
+   beschr:'De persoon vertoont opvallend storend gedrag in groepsverband: roept, treitert anderen of verstoort activiteiten zonder aanleiding.'},
+  {id:2,  titel:'Beweeglijk in de school',    niveau:'laag',     punten:1,  schoolOnly:true,  sportSchool:false, illu:'beweeglijk',
+   beschr:'De jongere beweegt zich opvallend vaak door het schoolgebouw zonder duidelijke reden, is regelmatig op plekken waar hij/zij niet hoeft te zijn en heeft veel wisselende contacten.'},
+  {id:3,  titel:'Negatief over politie',      niveau:'laag',     punten:1,  schoolOnly:false, sportSchool:false, illu:'politie',
+   beschr:'Er worden consequent negatieve uitspraken gedaan over politie of handhavers. Bij het zien van een agent is er een duidelijk afwijzende reactie.'},
+  {id:4,  titel:'Liegen / smoesjes',          niveau:'laag',     punten:1,  schoolOnly:false, sportSchool:false, illu:'liegen',
+   beschr:'De persoon geeft steeds vage of wisselende antwoorden over waar hij/zij is geweest of wat hij/zij heeft gedaan. Verhalen kloppen niet.'},
+  {id:5,  titel:'Fysiek gewelddadig gedrag',  niveau:'laag',     punten:1,  schoolOnly:false, sportSchool:false, illu:'geweld',
+   beschr:'Er zijn incidenten van fysieke agressie of intimidatie. Dit kan gaan om duwen, slaan of het dreigen daarmee tegenover anderen.'},
+  {id:6,  titel:'Rondhangen op school',       niveau:'laag',     punten:1,  schoolOnly:true,  sportSchool:false, illu:'rondhangen',
+   beschr:'De jongere hangt structureel rond op school terwijl hij/zij geen les heeft, zonder duidelijke reden. Aanwezig zonder doel.'},
+  {id:7,  titel:'Teruggetrokken gedrag',      niveau:'laag',     punten:1,  schoolOnly:false, sportSchool:true,  illu:'teruggetrokken',
+   beschr:'Iemand die voorheen sociaal actief was, trekt zich steeds meer terug. Vermijdt gesprekken, groepsactiviteiten en oogcontact.'},
+  {id:8,  titel:'Dure kleding',               niveau:'laag',     punten:1,  schoolOnly:false, sportSchool:false, illu:'kleding',
+   beschr:'De jongere draagt opvallend dure merkkleding of schoenen. Het is onduidelijk waar het geld voor de kleding vandaan komt.'},
+  {id:9,  titel:'Vaker actief op socialmedia',niveau:'laag',     punten:1,  schoolOnly:false, sportSchool:false, illu:'socialmedia',
+   beschr:'De jongere is constant op zijn/haar telefoon, voornamelijk bezig met sociale media. Reageert nerveus als er naar de telefoon wordt gevraagd.'},
+  {id:10, titel:'Schoolverzuim',              niveau:'laag',     punten:1,  schoolOnly:true,  sportSchool:false, illu:'verzuim',
+   beschr:'De jongere mist regelmatig lessen of hele schooldagen zonder duidelijke reden. Ouders zijn soms ook niet op de hoogte van de afwezigheid.'},
+  {id:11, titel:'Verminderde schoolprestaties',niveau:'laag',    punten:1,  schoolOnly:true,  sportSchool:false, illu:'prestaties',
+   beschr:'Cijfers gaan zichtbaar achteruit en de motivatie voor school is sterk afgenomen.'},
+  {id:12, titel:'Agressie en boos reageren',  niveau:'laag',     punten:1,  schoolOnly:false, sportSchool:false, illu:'agressie',
+   beschr:'Kleine dingen leiden tot felle, onverwachte uitbarstingen. De persoon reageert buiten proportie op opmerkingen of correcties.'},
+  {id:13, titel:'Niet openstaan voor hulp',   niveau:'laag',     punten:1,  schoolOnly:false, sportSchool:false, illu:'geenhulp',
+   beschr:'Aanbod van hulp, gesprek of begeleiding wordt voortdurend afgewezen. Mensen die willen helpen worden afgewezen.'},
+  {id:14, titel:'Altijd telefonisch bereikbaar',niveau:'laag',   punten:1,  schoolOnly:false, sportSchool:false, illu:'bereikbaar',
+   beschr:'De telefoon gaat nooit uit. Ook midden in de nacht worden berichten beantwoord. De jongere lijkt 24/7 "aan" te staan voor iemand.'},
+  {id:15, titel:'Luisteren naar criminaliteit verheerlijkende muziek', niveau:'laag', punten:1, schoolOnly:false, sportSchool:false, illu:'muziek',
+   beschr:'De jongere luistert structureel naar muziek die criminaliteit, drugshandel of geweld verheerlijkt en identificeert zich zichtbaar met de inhoud en levensstijl die daarin wordt beschreven.'},
+  {id:16, titel:'Criminaliteit verheerlijkende fysieke media',  niveau:'laag', punten:1, schoolOnly:false, sportSchool:false, illu:'media',
+   beschr:'De jongere heeft posters, stickers, decoratie of andere fysieke media in de omgeving die criminaliteit, bendes of drugscultuur verheerlijken.'},
+  {id:17, titel:'Dure leefstijl benadrukken', niveau:'gemiddeld',punten:5,  schoolOnly:false, sportSchool:false, illu:'leefstijl',
+   beschr:'Niet alleen dure kleding, maar ook dure uitjes, restaurants, gadgets of vakanties. Dit terwijl er geen duidelijke legale inkomstenbron is.'},
+  {id:18, titel:'Meerdere telefoons bezitten',niveau:'gemiddeld',punten:5,  schoolOnly:false, sportSchool:false, illu:'telefoons',
+   beschr:'De persoon heeft aantoonbaar meerdere telefoons bij zich, waarvan één vaak een eenvoudig prepaid toestel is dat apart gehouden wordt.'},
+  {id:19, titel:'Positief over drugsdealers', niveau:'gemiddeld',punten:5,  schoolOnly:false, sportSchool:false, illu:'dealers',
+   beschr:'Bekende dealers worden bewonderend besproken als "succesvol" of "slim". Crimineel gedrag wordt geromantiseerd als een aantrekkelijke levensstijl.'},
+  {id:20, titel:'Plotseling veel geld hebben',niveau:'gemiddeld',punten:5,  schoolOnly:false, sportSchool:false, illu:'geld',
+   beschr:'Van de ene op de andere dag heeft de persoon geld voor dingen die eerder niet betaalbaar waren. Er is geen logische verklaring voor deze inkomsten.'},
+  {id:21, titel:'Veel cash bij zich en dat laten zien of erover praten', niveau:'gemiddeld', punten:5, schoolOnly:false, sportSchool:false, illu:'cash',
+   beschr:'Heeft opvallend veel contant geld bij zich en praat hierover of laat dit zien aan anderen, bijvoorbeeld aan leeftijdsgenoten.'},
+  {id:22, titel:'Verslaafd aan gokken, drugs of alcohol', niveau:'gemiddeld', punten:5, schoolOnly:false, sportSchool:false, illu:'verslaving',
+   beschr:'Er zijn duidelijke signalen van verslaving. Dit maakt de jongere kwetsbaar voor uitbuiting en vergroot de kans op betrokkenheid bij criminele netwerken.'},
+  {id:23, titel:'Bijbaan in de nacht',        niveau:'gemiddeld',punten:5,  schoolOnly:false, sportSchool:false, illu:'nacht',
+   beschr:'Er wordt gesproken over een "bijbaan" of "bezorgwerk" dat uitsluitend \'s nachts plaatsvindt. Details zijn vaag en de inkomsten zijn niet helder.'},
+  {id:24, titel:'Onder druk gezet worden',    niveau:'hoog',     punten:15, schoolOnly:false, sportSchool:false, illu:'druk',
+   beschr:'De jongere geeft aan, of het is zichtbaar, dat hij/zij wordt gedwongen om dingen te doen. Er is angst, onrust of een gevoel van geen keuze hebben.'},
+  {id:25, titel:'Verwondingen (onduidelijke oorzaak)', niveau:'hoog', punten:15, schoolOnly:false, sportSchool:false, illu:'verwonding',
+   beschr:'Terugkerende verwondingen die niet logisch verklaard worden. Snijwonden, blauwe plekken of ander letsel waarover vaag gedaan wordt.'},
+  {id:26, titel:'Op vreemde tijdstippen weg moeten', niveau:'hoog', punten:15, schoolOnly:false, sportSchool:false, illu:'weggaan',
+   beschr:'De jongere moet plotseling en zonder uitleg weg, ook midden in de nacht of vroeg in de ochtend. Lijkt geen controle te hebben over zijn/haar eigen agenda.'},
+  {id:27, titel:'Omgang met criminele personen', niveau:'hoog',  punten:15, schoolOnly:false, sportSchool:false, illu:'criminelen',
+   beschr:'De jongere hangt structureel rond met bekende criminelen of intimiderend ogende personen. Oudere mannen die de jongere ophalen of afzetten.'},
+  {id:28, titel:'Wapenbezit',                 niveau:'hoog',     punten:15, schoolOnly:false, sportSchool:false, illu:'wapen',
+   beschr:'Er zijn aanwijzingen dat de jongere een wapen bij zich draagt of toegang heeft tot wapens. Dit is een acuut veiligheidssignaal.'},
+  {id:29, titel:'Drugsbezit',                 niveau:'hoog',     punten:15, schoolOnly:false, sportSchool:false, illu:'drugs',
+   beschr:'Er zijn aanwijzingen dat de persoon drugs bij zich heeft of verhandelt. Verdachte verpakkingen of zichtbare transacties.'}
+];
+
+/* ══════════════════════════════
+   STATE
+══════════════════════════════ */
+let omgeving = null;
+let actieveSignalen = [];
+let kaartIndex = 0;
+let antwoorden = [];
+let isDragging = false, startX = 0, startY = 0, currX = 0, currY = 0;
+let verwerkBezig = false;
+
+/* ══════════════════════════════
+   NAVIGATIE
+══════════════════════════════ */
+function naarScherm(naam) {
+  const ids = {start:'s-start', instructie:'s-instructie', omgeving:'s-omgeving', spel:'s-spel', resultaat:'s-resultaat'};
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(ids[naam]).classList.add('active');
+  if (naam === 'resultaat') {
+    setTimeout(() => { document.getElementById('s-resultaat').scrollTop = 0; }, 50);
+  }
+}
+
+function volledigeReset() {
+  omgeving = null;
+  kaartIndex = 0;
+  antwoorden = [];
+  actieveSignalen = [];
+  verwerkBezig = false;
+  document.querySelectorAll('.omgeving-btn').forEach(b => b.classList.remove('gekozen'));
+  document.getElementById('start-btn').disabled = true;
+  naarScherm('start');
+}
+
+/* ══════════════════════════════
+   OMGEVING KIEZEN
+══════════════════════════════ */
+function kiesOmgeving(btn, naam) {
+  document.querySelectorAll('.omgeving-btn').forEach(b => b.classList.remove('gekozen'));
+  btn.classList.add('gekozen');
+  omgeving = naam;
+  document.getElementById('start-btn').disabled = false;
+}
+
+function filterSignalen(omg) {
+  return ALLE_SIGNALEN.filter(s => {
+    if (s.schoolOnly) return omg === 'school';
+    if (s.sportSchool) return omg === 'school' || omg === 'sport';
+    return true;
+  });
+}
+
+function startSpel() {
+  if (!omgeving) return;
+  actieveSignalen = filterSignalen(omgeving);
+  kaartIndex = 0;
+  antwoorden = [];
+  verwerkBezig = false;
+
+  const labels = {straat:'Op straat', school:'School', sport:'Sport / activiteitencentrum'};
+  document.getElementById('hdr-omgeving').textContent = labels[omgeving];
+  document.getElementById('voortgang').style.width = '0%';
+
+  naarScherm('spel');
+  laadKaart();
+}
+
+function opnieuwZelfdeOmgeving() {
+  kaartIndex = 0;
+  antwoorden = [];
+  verwerkBezig = false;
+  document.getElementById('voortgang').style.width = '0%';
+  naarScherm('spel');
+  laadKaart();
+}
+
+/* ══════════════════════════════
+   KAART LADEN
+══════════════════════════════ */
+function laadKaart() {
+  if (kaartIndex >= actieveSignalen.length) {
+    toonResultaat();
+    return;
+  }
+  const s = actieveSignalen[kaartIndex];
+  const totaal = actieveSignalen.length;
+
+  document.getElementById('hdr-teller').textContent = `Signaal ${kaartIndex + 1} van ${totaal}`;
+  document.getElementById('voortgang').style.width = `${(kaartIndex / totaal) * 100}%`;
+
+  document.getElementById('k-illu').innerHTML = maakIllu(s.illu);
+  document.getElementById('k-titel').textContent = s.titel;
+  document.getElementById('k-beschr').textContent = s.beschr;
+
+  const k = document.getElementById('huidige-kaart');
+  k.style.transition = 'none';
+  k.style.transform = '';
+  k.style.opacity = '1';
+  document.getElementById('ov-ja').style.opacity = '0';
+  document.getElementById('ov-nee').style.opacity = '0';
+
+  setupSwipe();
+}
+
+/* ══════════════════════════════
+   POPUP FUNCTIES
+══════════════════════════════ */
+function toonPopup(type) {
+  document.getElementById('popup-' + type).classList.add('toon');
+}
+function sluitPopup(type) {
+  document.getElementById('popup-' + type).classList.remove('toon');
+}
+function bevestigTerug() {
+  sluitPopup('terug');
+  volledigeReset();
+  naarScherm('omgeving');
+}
+function bevestigHome() {
+  sluitPopup('home');
+  volledigeReset();
+}
+
+/* ══════════════════════════════
+   CENTRALE SWIPE FEEDBACK
+══════════════════════════════ */
+let feedbackTimer = null;
+function toonFeedback(keuze) {
+  const fb = document.getElementById('swipe-feedback');
+  const cirkel = document.getElementById('fb-cirkel');
+  const icoon = document.getElementById('fb-icoon');
+  const label = document.getElementById('fb-label');
+
+  fb.classList.remove('zichtbaar-fb','niet-fb','weet-fb','toon');
+
+  if (keuze === 'zichtbaar') {
+    fb.classList.add('zichtbaar-fb');
+    icoon.innerHTML = '<polyline points="20 6 9 17 4 12" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
+    label.textContent = 'Zichtbaar';
+  } else if (keuze === 'niet') {
+    fb.classList.add('niet-fb');
+    icoon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18" stroke="white" stroke-width="2.5" stroke-linecap="round"/><line x1="6" y1="6" x2="18" y2="18" stroke="white" stroke-width="2.5" stroke-linecap="round"/>';
+    label.textContent = 'Niet zichtbaar';
+  } else {
+    fb.classList.add('weet-fb');
+    icoon.innerHTML = '<circle cx="12" cy="12" r="10" stroke="white" stroke-width="2.5"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" stroke="white" stroke-width="2.5" stroke-linecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="white" stroke-width="2.5" stroke-linecap="round"/>';
+    label.textContent = 'Weet ik niet';
+  }
+
+  // Force reflow voor animatie
+  void fb.offsetWidth;
+  fb.classList.add('toon');
+
+  if (feedbackTimer) clearTimeout(feedbackTimer);
+  feedbackTimer = setTimeout(() => {
+    fb.classList.remove('toon');
+  }, 620);
+}
+
+/* ══════════════════════════════
+   ANTWOORD VERWERKEN
+══════════════════════════════ */
+function verwerkAntwoord(keuze) {
+  if (verwerkBezig) return;
+  verwerkBezig = true;
+  antwoorden.push({signaal: actieveSignalen[kaartIndex], keuze});
+
+  // Toon centrale feedback overlay
+  toonFeedback(keuze);
+
+  const k = document.getElementById('huidige-kaart');
+  k.style.transition = 'transform .38s cubic-bezier(.25,.46,.45,.94), opacity .38s ease';
+  if (keuze === 'weet') {
+    k.style.transform = 'translateY(-90px) scale(0.9)';
+    k.style.opacity = '0';
+  } else {
+    const x = keuze === 'zichtbaar' ? 520 : -520;
+    const r = keuze === 'zichtbaar' ? 22 : -22;
+    k.style.transform = `translateX(${x}px) rotate(${r}deg)`;
+    k.style.opacity = '0';
+  }
+  setTimeout(() => { kaartIndex++; verwerkBezig = false; laadKaart(); }, 390);
+}
+
+/* ══════════════════════════════
+   SWIPE
+══════════════════════════════ */
+function setupSwipe() {
+  const k = document.getElementById('huidige-kaart');
+  const nieuw = k.cloneNode(true);
+  k.parentNode.replaceChild(nieuw, k);
+  nieuw.addEventListener('mousedown', e => { isDragging=true; startX=e.clientX; startY=e.clientY; currX=0; currY=0; document.addEventListener('mousemove',onMove); document.addEventListener('mouseup',onUp); });
+  nieuw.addEventListener('touchstart', e => { isDragging=true; startX=e.touches[0].clientX; startY=e.touches[0].clientY; currX=0; currY=0; document.addEventListener('touchmove',onMoveT,{passive:true}); document.addEventListener('touchend',onUpT); },{passive:true});
+}
+function onMove(e){if(!isDragging)return;currX=e.clientX-startX;currY=e.clientY-startY;beweeg(currX,currY);}
+function onMoveT(e){if(!isDragging)return;currX=e.touches[0].clientX-startX;currY=e.touches[0].clientY-startY;beweeg(currX,currY);}
+function onUp(){document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp);if(isDragging){isDragging=false;eindeSwipe(currX,currY);}}
+function onUpT(){document.removeEventListener('touchmove',onMoveT);document.removeEventListener('touchend',onUpT);if(isDragging){isDragging=false;eindeSwipe(currX,currY);}}
+
+function beweeg(dx,dy){
+  if(verwerkBezig)return;
+  const k=document.getElementById('huidige-kaart');if(!k)return;
+
+  // Bepaal dominante richting
+  const isOmhoog = dy < -40 && Math.abs(dy) > Math.abs(dx) * 0.8;
+
+  if(isOmhoog){
+    // Omhoog bewegen: kaart schuift omhoog, geen rotatie
+    k.style.transform=`translateY(${dy}px) scale(${Math.max(0.92, 1 + dy/800)})`;
+    document.getElementById('ov-ja').style.opacity='0';
+    document.getElementById('ov-nee').style.opacity='0';
+  } else {
+    // Links/rechts bewegen
+    const rot=dx*0.07;
+    k.style.transform=`translateX(${dx}px) rotate(${rot}deg)`;
+    const dr=55,oja=document.getElementById('ov-ja'),onee=document.getElementById('ov-nee');
+    if(!oja||!onee)return;
+    if(dx>dr){oja.style.opacity=Math.min((dx-dr)/70,1);onee.style.opacity='0';}
+    else if(dx<-dr){onee.style.opacity=Math.min((-dx-dr)/70,1);oja.style.opacity='0';}
+    else{oja.style.opacity='0';onee.style.opacity='0';}
+  }
+}
+
+function eindeSwipe(dx,dy){
+  if(verwerkBezig)return;
+  const isOmhoog = dy < -80 && Math.abs(dy) > Math.abs(dx) * 0.8;
+  if(isOmhoog) verwerkAntwoord('weet');
+  else if(dx>100) verwerkAntwoord('zichtbaar');
+  else if(dx<-100) verwerkAntwoord('niet');
+  else{
+    const k=document.getElementById('huidige-kaart');if(!k)return;
+    k.style.transition='transform .32s cubic-bezier(.34,1.56,.64,1)';
+    k.style.transform='';
+    const oja=document.getElementById('ov-ja'),onee=document.getElementById('ov-nee');
+    if(oja)oja.style.opacity='0';if(onee)onee.style.opacity='0';
+    setTimeout(()=>{if(k)k.style.transition='';},330);
+  }
+}
+
+/* ══════════════════════════════
+   DROPDOWN TOGGLE
+══════════════════════════════ */
+function toggleDropdown() {
+  const inhoud = document.getElementById('dropdown-inhoud');
+  const pijl = document.getElementById('dropdown-pijl');
+  const isOpen = inhoud.classList.contains('open');
+  inhoud.classList.toggle('open', !isOpen);
+  pijl.classList.toggle('open', !isOpen);
+}
+
+/* ══════════════════════════════
+   PUNTENSYSTEEM & RISICO
+══════════════════════════════ */
+function berekenRisico() {
+  const zichtbaar = antwoorden.filter(a => a.keuze === 'zichtbaar');
+  const nLaag  = zichtbaar.filter(a => a.signaal.niveau === 'laag').length;
+  const nGem   = zichtbaar.filter(a => a.signaal.niveau === 'gemiddeld').length;
+  const nHoog  = zichtbaar.filter(a => a.signaal.niveau === 'hoog').length;
+  const punten = zichtbaar.reduce((som, a) => som + a.signaal.punten, 0);
+
+  let risico;
+  if      (punten >= 45) risico = 'extreem_hoog';
+  else if (punten >= 17) risico = 'hoog';
+  else if (punten >= 8)  risico = 'gemiddeld';
+  else if (punten >= 4)  risico = 'laag';
+  else                   risico = 'verwaarloosbaar';
+
+  return {risico, nLaag, nGem, nHoog, punten};
+}
+
+/* ══════════════════════════════
+   RISICOMETER SVG
+   — viewBox ruim genoeg zodat RISICO-label nooit afsnijdt
+══════════════════════════════ */
+function bouwMeter(risico) {
+  const cx=155, cy=145, ro=115, ri=70;
+  function pol(r,deg){const rad=deg*Math.PI/180;return[cx+r*Math.cos(rad),cy+r*Math.sin(rad)];}
+  function boogPad(van,naar){
+    const[x1,y1]=pol(ro,van),[x2,y2]=pol(ro,naar);
+    const[xi1,yi1]=pol(ri,van),[xi2,yi2]=pol(ri,naar);
+    const lg=(naar-van)>180?1:0;
+    return `M${x1} ${y1} A${ro} ${ro} 0 ${lg} 1 ${x2} ${y2} L${xi2} ${yi2} A${ri} ${ri} 0 ${lg} 0 ${xi1} ${yi1}Z`;
+  }
+  const segs=[
+    {van:-180,naar:-144,kleur:'#4ade80'},
+    {van:-144,naar:-108,kleur:'#a3e635'},
+    {van:-108,naar:-72, kleur:'#facc15'},
+    {van:-72, naar:-36, kleur:'#fb923c'},
+    {van:-36, naar:0,   kleur:'#ef4444'},
+  ];
+  const naaldDeg={verwaarloosbaar:-162,laag:-126,gemiddeld:-90,hoog:-54,extreem_hoog:-18};
+  const deg=naaldDeg[risico]??-90;
+  const[nx,ny]=pol(85,deg);
+
+  // viewBox hoogte 185 zodat RISICO-label (cy+28=173) plus marge altijd zichtbaar is
+  let svg=`<svg viewBox="0 0 310 185" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">`;
+  segs.forEach(s=>{svg+=`<path d="${boogPad(s.van,s.naar)}" fill="${s.kleur}" opacity=".92"/>`;});
+  segs.forEach(s=>{svg+=`<path d="${boogPad(s.van,s.naar)}" fill="none" stroke="white" stroke-width="2" opacity=".45"/>`;});
+
+  // Labels — opnieuw gepositioneerd zodat ze binnen viewBox vallen
+  const labels=[
+    {r1:'Verwaar-',r2:'loosbaar',x:26, y1:132,y2:142,fs:7.5},
+    {r1:'Laag',    r2:null,      x:76, y1:55, y2:null,fs:8.5},
+    {r1:'Gemiddeld',r2:null,     x:155,y1:28, y2:null,fs:8.5},
+    {r1:'Hoog',    r2:null,      x:234,y1:55, y2:null,fs:8.5},
+    {r1:'Extreem', r2:'hoog',    x:284,y1:132,y2:142,fs:7.5},
+  ];
+  labels.forEach(l=>{
+    svg+=`<text text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="${l.fs}" font-weight="700" fill="#1a1a2e" opacity=".85">`;
+    svg+=`<tspan x="${l.x}" y="${l.y1}">${l.r1}</tspan>`;
+    if(l.r2)svg+=`<tspan x="${l.x}" y="${l.y2}">${l.r2}</tspan>`;
+    svg+=`</text>`;
+  });
+
+  // Naald
+  svg+=`<line x1="${cx}" y1="${cy}" x2="${nx}" y2="${ny}" stroke="rgba(0,0,0,.18)" stroke-width="5" stroke-linecap="round" transform="translate(2,2)"/>`;
+  svg+=`<line x1="${cx}" y1="${cy}" x2="${nx}" y2="${ny}" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/>`;
+  svg+=`<circle cx="${cx}" cy="${cy}" r="10" fill="#1a1a2e"/>`;
+  svg+=`<circle cx="${cx}" cy="${cy}" r="4.5" fill="white" opacity=".9"/>`;
+  // RISICO label — voldoende ruimte onder naaldpunt
+  svg+=`<text x="${cx}" y="${cy+26}" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-size="15" font-weight="800" fill="#1a1a2e" letter-spacing=".1em">RISICO</text>`;
+  svg+=`</svg>`;
+  return svg;
+}
+
+/* ══════════════════════════════
+   RESULTAAT TONEN
+══════════════════════════════ */
+function toonResultaat() {
+  const {risico,nLaag,nGem,nHoog} = berekenRisico();
+
+  const INFO = {
+    verwaarloosbaar:{
+      naam:'Verwaarloosbaar risico',
+      sub:'Er zijn op dit moment geen duidelijke aanwijzingen voor ondermijning.',
+      kleur:'#14532d',bg:'#f0fdf4',rand:'#4ade80',
+      disclaimerBg:'#dcfce7',disclaimerRand:'#86efac',disclaimerKleur:'#166534',
+      aTitel:'Geen verdere actie nodig',
+      aTekst:'Er zijn op dit moment geen duidelijke aanwijzingen voor ondermijning. Actie op basis van deze signalen is niet nodig.'
+    },
+    laag:{
+      naam:'Laag risico',
+      sub:'Er zijn beperkte signalen aanwezig.',
+      kleur:'#166534',bg:'#dcfce7',rand:'#86efac',
+      disclaimerBg:'#f0fdf4',disclaimerRand:'#4ade80',disclaimerKleur:'#15803d',
+      aTitel:'Blijf observeren',
+      aTekst:'Er zijn beperkte signalen aanwezig. Neem bij een sterk onderbuikgevoel contact op met een wijkagent.'
+    },
+    gemiddeld:{
+      naam:'Gemiddeld risico',
+      sub:'Er zijn signalen aanwezig, maar geen directe dreiging.',
+      kleur:'#92400e',bg:'#fef9c3',rand:'#fde047',
+      disclaimerBg:'#fef3c7',disclaimerRand:'#fbbf24',disclaimerKleur:'#92400e',
+      aTitel:'Bespreek de situatie',
+      aTekst:'Er zijn signalen aanwezig, maar geen directe dreiging. Bespreek de situatie met een collega of met een wijkagent en blijf alert op de situatie.'
+    },
+    hoog:{
+      naam:'Hoog risico',
+      sub:'Er zijn duidelijke signalen van mogelijke ondermijning.',
+      kleur:'#9a3412',bg:'#ffedd5',rand:'#fb923c',
+      disclaimerBg:'#fee2e2',disclaimerRand:'#fca5a5',disclaimerKleur:'#991b1b',
+      aTitel:'Melden bij hulpinstanties',
+      aTekst:'Er zijn duidelijke signalen van mogelijke ondermijning. Bespreek de situatie met collega\'s of andere betrokkenen voor bevestiging. Meld je bevindingen bij Meld Misdaad Anoniem (0800-7000), de wijkagent of via het algemeen politienummer (0900-8844).'
+    },
+    extreem_hoog:{
+      naam:'Extreem hoog risico',
+      sub:'Er zijn sterke aanwijzingen voor ondermijning en mogelijk direct gevaar.',
+      kleur:'#7f1d1d',bg:'#fee2e2',rand:'#ef4444',
+      disclaimerBg:'#fecaca',disclaimerRand:'#ef4444',disclaimerKleur:'#7f1d1d',
+      aTitel:'Direct actie vereist — bij acuut gevaar bel 112',
+      aTekst:'Er zijn sterke aanwijzingen voor ondermijning en mogelijk direct gevaar voor de jongere. Onderneem direct actie door de situatie te bespreken met collega\'s of andere betrokkenen. Bevestigen zij de signalen, neem dan direct contact op met Meld Misdaad Anoniem (0800-7000), de wijkagent of het algemene politienummer (0900-8844). Bel bij spoed of acuut gevaar altijd 112.'
+    }
+  };
+
+  const info = INFO[risico];
+
+  document.getElementById('res-naam').textContent = info.naam;
+  document.getElementById('res-sub').textContent = info.sub;
+
+  // Meter via innerHTML — geen outerHTML bug
+  document.getElementById('meter-wrap').innerHTML = bouwMeter(risico);
+
+  // Advies box
+  const ab = document.getElementById('advies-box');
+  ab.style.background = info.bg;
+  ab.style.borderColor = info.rand;
+  const at = document.getElementById('advies-titel');
+  at.style.color = info.kleur;
+  at.textContent = info.aTitel;
+  const atx = document.getElementById('advies-tekst');
+  atx.style.color = info.kleur;
+  atx.textContent = info.aTekst;
+
+  // Disclaimer box — afwijkende achtergrond, aansluitend op advies
+  const db = document.getElementById('disclaimer-box');
+  db.style.background = info.disclaimerBg;
+  db.style.borderColor = info.disclaimerRand;
+  const dl = document.getElementById('disclaimer-label');
+  dl.style.color = info.disclaimerKleur;
+  db.querySelector('.disclaimer-tekst').style.color = info.disclaimerKleur;
+
+  // Tellingen
+  document.getElementById('tel-laag').textContent  = nLaag;
+  document.getElementById('tel-gem').textContent   = nGem;
+  document.getElementById('tel-hoog').textContent  = nHoog;
+
+  // Dropdown antwoorden opbouwen (gesloten bij start)
+  const niveauL = {laag:'Laag',gemiddeld:'Gemiddeld',hoog:'Hoog'};
+  const icoonM  = {zichtbaar:'✓',niet:'✗',weet:'?'};
+  document.getElementById('dropdown-inhoud').innerHTML = antwoorden.map(a =>
+    `<div class="ant-item ${a.keuze}">
+      <div class="ant-dot">${icoonM[a.keuze]}</div>
+      <div class="ant-naam">${a.signaal.titel}</div>
+      <div class="ant-niveau">${niveauL[a.signaal.niveau]}</div>
+    </div>`
+  ).join('');
+  // Zorg dat dropdown gesloten start
+  document.getElementById('dropdown-inhoud').classList.remove('open');
+  document.getElementById('dropdown-pijl').classList.remove('open');
+
+  naarScherm('resultaat');
+}
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw.js').catch(function(){});
+  });
+}
+</script>
+</body>
+</html>
