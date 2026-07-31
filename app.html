@@ -544,7 +544,7 @@ body{
 </head>
 <body><div style="position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:9999;pointer-events:none;">
   <div style="position:absolute;top:8px;right:8px;pointer-events:all;">
-    <a href="/index.html" style="
+    <a href="/index.html" onclick="sessionStorage.setItem('gotoDashboard','1')" style="
       display:inline-flex;align-items:center;gap:6px;
       background:rgba(0,0,0,0.55);
       color:white;
@@ -575,7 +575,7 @@ body{
   </div>
   <div class="start-bottom">
     <button class="grote-btn" onclick="naarScherm('instructie')">Aan de slag →</button>
-    <p class="versie-tag">Scherp Signaal · V2.0</p>
+    <p class="versie-tag">Scherp Signaal · V4.2</p>
     <p class="versie-tag">Dit is een product van Scherp in Veiligheid.<br>
     <a href="https://www.scherpinveiligheid.nl" target="_blank" style="color:#ff6a13;">www.scherpinveiligheid.nl</a></p>
   </div>
@@ -679,6 +679,19 @@ body{
           <div class="omgeving-desc">Sportclub, jongerencentrum</div>
         </div>
         <div class="omgeving-radio"></div>
+      </button>
+      <button class="omgeving-knop" style="opacity:0.5;cursor:not-allowed;" disabled>
+        <div class="omgeving-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+        </div>
+        <div class="omgeving-info">
+          <div class="omgeving-naam">Online &nbsp;<span style="background:#ff6a13;color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:0.5px;vertical-align:middle;">BINNENKORT</span></div>
+          <div class="omgeving-desc">Sociale media, chats, gamen</div>
+        </div>
       </button>
     </div>
     <button class="grote-btn" id="start-btn" onclick="startSpel()" disabled>Starten →</button>
