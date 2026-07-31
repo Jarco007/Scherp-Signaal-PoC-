@@ -542,7 +542,7 @@ body{
 .footer-naam em{color:var(--oranje);font-style:normal;}
 </style>
 </head>
-<body><div style="position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:9999;pointer-events:none;">
+<body><div id="dashboard-knop" style="position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:9999;pointer-events:none;">
   <div style="position:absolute;top:8px;right:8px;pointer-events:all;">
     <a href="/index.html" onclick="sessionStorage.setItem('gotoDashboard','1')" style="
       display:inline-flex;align-items:center;gap:6px;
@@ -1067,6 +1067,11 @@ function naarScherm(naam) {
   document.getElementById(ids[naam]).classList.add('active');
   if (naam === 'resultaat') {
     setTimeout(() => { document.getElementById('s-resultaat').scrollTop = 0; }, 50);
+  }
+  // Dashboard knop verbergen op spel en resultaatscherm
+  const dashKnop = document.getElementById('dashboard-knop');
+  if (dashKnop) {
+    dashKnop.style.display = (naam === 'spel' || naam === 'resultaat') ? 'none' : 'block';
   }
 }
 
