@@ -14,7 +14,7 @@
    DEMO SCHERMEN — Login & Dashboard
 ══════════════════════════════════════ */
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Barlow',sans-serif;background:#f4f6f9;}
+body{font-family:'Barlow',sans-serif;background:#f4f6f9;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 
 .demo-shell{
   max-width:430px;
@@ -22,11 +22,12 @@ body{font-family:'Barlow',sans-serif;background:#f4f6f9;}
   margin:0 auto;
   position:relative;
   background:white;
-  overflow:hidden;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
 }
 
 /* ── Scherm wisselen ── */
-.demo-scherm{display:none;min-height:100vh;flex-direction:column;}
+.demo-scherm{display:none;min-height:100vh;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 .demo-scherm.actief{display:flex;}
 
 /* ══ GEMEENTE SELECT SCHERM ══ */
@@ -406,7 +407,7 @@ if (sessionStorage.getItem('gotoDashboard') === '1') {
     <div class="gemeente-optie" style="opacity:0.4;cursor:not-allowed;">
       <div class="gemeente-optie-placeholder">Binnenkort</div>
       <div class="gemeente-optie-info">
-        <h3>Gemeente Heerenveen</h3>
+        <h3>Gemeente Deventer</h3>
         <p>Binnenkort beschikbaar</p>
       </div>
       <div class="gemeente-optie-radio"></div>
@@ -1072,7 +1073,7 @@ body{
   </div>
   <div class="start-bottom">
     <button class="grote-btn" onclick="naarScherm('instructie')">Aan de slag →</button>
-    <p class="versie-tag">Scherp Signaal · V2.0</p>
+    <p class="versie-tag">Scherp Signaal · V4.2</p>
     <p class="versie-tag">Dit is een product van Scherp in Veiligheid.<br>
     <a href="https://www.scherpinveiligheid.nl" target="_blank" style="color:#ff6a13;">www.scherpinveiligheid.nl</a></p>
   </div>
