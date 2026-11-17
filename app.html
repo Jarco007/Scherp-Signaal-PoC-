@@ -540,6 +540,27 @@ body{
 .footer-logo{display:flex;align-items:center;justify-content:center;gap:8px;padding-bottom:6px;}
 .footer-naam{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--blauw);}
 .footer-naam em{color:var(--oranje);font-style:normal;}
+
+/* Route-keuze (snel / volledig) */
+.modus-wissel{display:flex;gap:8px;margin:14px 0 6px;}
+.modus-opt{flex:1;padding:10px 8px;border:2px solid #cbd5e1;border-radius:12px;background:#fff;color:#334155;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.modus-opt b{font-size:15px;}
+.modus-opt span{font-size:11px;color:#64748b;}
+.modus-opt.actief{border-color:#006a8e;background:#e6f2f6;color:#004d68;}
+.modus-hint{font-size:12px;line-height:1.45;color:#475569;margin:0 0 10px;text-align:center;}
+.res-modus{font-size:12px;line-height:1.45;color:#475569;text-align:center;margin:6px 12px 0;}
+/* Binnenkort-locaties */
+.loc-binnenkort{position:relative;}
+.loc-binnenkort .omgeving-btn{opacity:0.5;cursor:not-allowed;width:100%;}
+.bk-label{background:#ff6a13;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:.5px;vertical-align:middle;white-space:nowrap;}
+.bk-info{position:absolute;top:50%;right:12px;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;border:2px solid #006a8e;background:#fff;color:#006a8e;font-weight:800;font-family:Georgia,serif;font-style:italic;font-size:16px;cursor:pointer;z-index:2;}
+.loc-sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10000;display:none;}
+.loc-sheet-bg.open{display:block;}
+.loc-sheet{position:absolute;left:50%;bottom:0;width:100%;max-width:430px;transform:translate(-50%,100%);background:#fff;border-radius:20px 20px 0 0;padding:22px 22px 28px;transition:transform .3s ease;}
+.loc-sheet-bg.open .loc-sheet{transform:translate(-50%,0);}
+.loc-sheet h3{color:#006a8e;font-size:20px;margin-bottom:10px;}
+.loc-sheet p{font-size:15px;line-height:1.55;color:#1a1a2e;margin-bottom:18px;}
+.loc-sheet button{width:100%;padding:14px;border:none;border-radius:12px;background:#006a8e;color:#fff;font-size:16px;font-weight:700;cursor:pointer;}
 </style>
 </head>
 <body><div id="dashboard-knop" style="position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:9999;pointer-events:none;">
@@ -575,7 +596,7 @@ body{
   </div>
   <div class="start-bottom">
     <button class="grote-btn" onclick="naarScherm('instructie')">Aan de slag →</button>
-    <p class="versie-tag">Scherp Signaal · V2.0</p>
+    <p class="versie-tag">Scherp Signaal · V4.2</p>
     <p class="versie-tag">Dit is een product van Scherp in Veiligheid.<br>
     <a href="https://www.scherpinveiligheid.nl" target="_blank" style="color:#ff6a13;">www.scherpinveiligheid.nl</a></p>
   </div>
@@ -680,20 +701,32 @@ body{
         </div>
         <div class="omgeving-radio"></div>
       </button>
-      <button class="omgeving-knop" style="opacity:0.5;cursor:not-allowed;" disabled>
-        <div class="omgeving-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="2" y1="12" x2="22" y2="12"/>
-            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-          </svg>
-        </div>
-        <div class="omgeving-info">
-          <div class="omgeving-naam">Online &nbsp;<span style="background:#ff6a13;color:white;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:0.5px;vertical-align:middle;">BINNENKORT</span></div>
-          <div class="omgeving-desc">Sociale media, chats, gamen</div>
-        </div>
-      </button>
+      <div class="loc-binnenkort">
+        <button class="omgeving-btn" disabled aria-disabled="true">
+          <div class="omgeving-icoon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></div>
+          <div class="omgeving-info">
+            <div class="omgeving-naam">Thuis <span class="bk-label">BINNENKORT</span></div>
+            <div class="omgeving-desc">Signalen in de thuissituatie</div>
+          </div>
+        </button>
+        <button class="bk-info" onclick="openLocInfo('thuis')" aria-label="Meer informatie over Thuis">i</button>
+      </div>
+      <div class="loc-binnenkort">
+        <button class="omgeving-btn" disabled aria-disabled="true">
+          <div class="omgeving-icoon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+          <div class="omgeving-info">
+            <div class="omgeving-naam">Online <span class="bk-label">BINNENKORT</span></div>
+            <div class="omgeving-desc">Sociale media, chats, gamen</div>
+          </div>
+        </button>
+        <button class="bk-info" onclick="openLocInfo('online')" aria-label="Meer informatie over Online">i</button>
+      </div>
     </div>
+    <div class="modus-wissel" role="group" aria-label="Kies de route">
+      <button type="button" id="modus-snel" class="modus-opt" onclick="kiesModus('snel')"><b>Snel (test)</b><span>Korter &middot; voorlopig</span></button>
+      <button type="button" id="modus-vol" class="modus-opt actief" onclick="kiesModus('volledig')"><b>Volledig</b><span>Alle signalen</span></button>
+    </div>
+    <p class="modus-hint" id="modus-hint"></p>
     <button class="grote-btn" id="start-btn" onclick="startSpel()" disabled>Starten →</button>
   </div>
 </div>
@@ -855,6 +888,7 @@ body{
     <p class="res-label">Risicobeoordeling</p>
     <div class="res-risico-naam" id="res-naam"></div>
     <p class="res-risico-sub" id="res-sub"></p>
+    <p class="res-modus" id="res-modus"></p>
     <div class="meter-wrap" id="meter-wrap"></div>
   </div>
   <div class="res-body">
@@ -1052,6 +1086,7 @@ const ALLE_SIGNALEN = [
    STATE
 ══════════════════════════════ */
 let omgeving = null;
+let modus = 'volledig'; // standaard volledig; 'snel' is een voorlopige test
 let actieveSignalen = [];
 let kaartIndex = 0;
 let antwoorden = [];
@@ -1089,11 +1124,86 @@ function volledigeReset() {
 /* ══════════════════════════════
    OMGEVING KIEZEN
 ══════════════════════════════ */
+kiesModus('volledig');
+
 function kiesOmgeving(btn, naam) {
   document.querySelectorAll('.omgeving-btn').forEach(b => b.classList.remove('gekozen'));
   btn.classList.add('gekozen');
   omgeving = naam;
   document.getElementById('start-btn').disabled = false;
+}
+
+/* ══════════════════════════════
+   SNELLE ROUTE (TEST — VOORLOPIG, NIET GEVALIDEERD)
+   Clusters, poortsignalen en verbanden zijn een VOORSTEL en
+   moeten door experts worden getoetst. Zie signaalverbanden.json.
+   Stap 1: altijd gevraagd (poortsignalen + ernstige signalen)
+   Stap 2: poortsignaal zichtbaar of 'weet ik niet' -> rest van het cluster
+   Stap 3: >=2 zichtbare signalen in een verband -> rest van dat verband
+══════════════════════════════ */
+const SNEL = {
+  altijd: [10,12,20,24,25,26,27,28,29],
+  clusters: {
+    geld:     {poort:20, signalen:[8,17,18,20,21]},
+    tijd:     {poort:26, signalen:[9,14,18,23,26]},
+    school:   {poort:10, signalen:[1,2,6,7,10,11]},
+    netwerk:  {poort:27, signalen:[3,7,13,15,16,19,27]},
+    gedrag:   {poort:12, signalen:[1,4,5,12]},
+    middelen: {poort:29, signalen:[22,28,29]},
+    dwang:    {poort:24, signalen:[4,7,13,24,25]}
+  },
+  verbanden: [
+    [18,20,8,17],[10,18,8],[20,21],[23,26,14],[10,11],[10,6,23,26],
+    [27,19],[27,19,3,15,16],[12,13],[25,28,12,5],[24,25,7,4,13],[28,22,29],[9,14,18]
+  ]
+};
+
+function signaalById(id) { return ALLE_SIGNALEN.find(s => s.id === id); }
+
+function kiesModus(m) {
+  modus = m;
+  document.getElementById('modus-snel').classList.toggle('actief', m === 'snel');
+  document.getElementById('modus-vol').classList.toggle('actief', m === 'volledig');
+  document.getElementById('modus-hint').textContent = m === 'snel'
+    ? 'Snelle route: je krijgt alleen de signalen die bij jouw antwoorden passen. Voorlopig en nog niet gevalideerd.'
+    : 'Volledige route: alle signalen voor deze locatie komen langs.';
+}
+
+function beginSnel(toegestaan) {
+  const ids = SNEL.altijd.filter(id => toegestaan.has(id));
+  // Bestaat het poortsignaal niet op deze locatie, dan vragen we de signalen
+  // van dat cluster die wel bij de locatie horen direct.
+  Object.values(SNEL.clusters).forEach(c => {
+    if (!toegestaan.has(c.poort)) {
+      c.signalen.forEach(id => { if (toegestaan.has(id) && !ids.includes(id)) ids.push(id); });
+    }
+  });
+  return ids.map(signaalById);
+}
+
+function bouwActieveSignalen() {
+  const toegestaan = filterSignalen(omgeving);
+  if (modus !== 'snel') return toegestaan;
+  return beginSnel(new Set(toegestaan.map(s => s.id)));
+}
+
+function breidUitSnel() {
+  const toegestaan = new Set(filterSignalen(omgeving).map(s => s.id));
+  const gevraagd = new Set(actieveSignalen.map(s => s.id));
+  const antw = {};
+  antwoorden.forEach(a => { antw[a.signaal.id] = a.keuze; });
+  const voegToe = ids => ids.forEach(id => {
+    if (toegestaan.has(id) && !gevraagd.has(id)) {
+      actieveSignalen.push(signaalById(id));
+      gevraagd.add(id);
+    }
+  });
+  Object.values(SNEL.clusters).forEach(c => {
+    if (antw[c.poort] === 'zichtbaar' || antw[c.poort] === 'weet') voegToe(c.signalen);
+  });
+  SNEL.verbanden.forEach(v => {
+    if (v.filter(id => antw[id] === 'zichtbaar').length >= 2) voegToe(v);
+  });
 }
 
 function filterSignalen(omg) {
@@ -1106,7 +1216,7 @@ function filterSignalen(omg) {
 
 function startSpel() {
   if (!omgeving) return;
-  actieveSignalen = filterSignalen(omgeving);
+  actieveSignalen = bouwActieveSignalen();
   kaartIndex = 0;
   antwoorden = [];
   verwerkBezig = false;
@@ -1120,6 +1230,7 @@ function startSpel() {
 }
 
 function opnieuwZelfdeOmgeving() {
+  actieveSignalen = bouwActieveSignalen();
   kaartIndex = 0;
   antwoorden = [];
   verwerkBezig = false;
@@ -1139,7 +1250,9 @@ function laadKaart() {
   const s = actieveSignalen[kaartIndex];
   const totaal = actieveSignalen.length;
 
-  document.getElementById('hdr-teller').textContent = `Signaal ${kaartIndex + 1} van ${totaal}`;
+  document.getElementById('hdr-teller').textContent = modus === 'snel'
+    ? `Signaal ${kaartIndex + 1} · snelle route (test)`
+    : `Signaal ${kaartIndex + 1} van ${totaal}`;
   document.getElementById('voortgang').style.width = `${(kaartIndex / totaal) * 100}%`;
 
   document.getElementById('k-illu').innerHTML = maakIllu(s.illu);
@@ -1218,6 +1331,7 @@ function verwerkAntwoord(keuze) {
   if (verwerkBezig) return;
   verwerkBezig = true;
   antwoorden.push({signaal: actieveSignalen[kaartIndex], keuze});
+  if (modus === 'snel') breidUitSnel();
 
   // Toon centrale feedback overlay
   toonFeedback(keuze);
@@ -1382,6 +1496,13 @@ function bouwMeter(risico) {
 ══════════════════════════════ */
 function toonResultaat() {
   const {risico,nLaag,nGem,nHoog} = berekenRisico();
+  const modusEl = document.getElementById('res-modus');
+  if (modusEl) {
+    const totaalLocatie = filterSignalen(omgeving).length;
+    modusEl.textContent = modus === 'snel'
+      ? `Snelle route (test): ${antwoorden.length} van ${totaalLocatie} signalen beoordeeld. Voorlopig en nog niet gevalideerd. Signalen die niet zijn gevraagd tellen niet mee.`
+      : `Volledige route: ${antwoorden.length} signalen beoordeeld.`;
+  }
 
   const INFO = {
     verwaarloosbaar:{
@@ -1481,6 +1602,23 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').catch(function(){});
   });
 }
+</script>
+
+<div class="loc-sheet-bg" id="loc-sheet-bg" onclick="if(event.target===this)sluitLocInfo()">
+  <div class="loc-sheet" role="dialog" aria-modal="true">
+    <h3 id="loc-sheet-titel"></h3>
+    <p id="loc-sheet-tekst"></p>
+    <button onclick="sluitLocInfo()">Sluiten</button>
+  </div>
+</div>
+<script>
+function openLocInfo(k){
+  var t={thuis:'Thuis',online:'Online'}[k];
+  document.getElementById('loc-sheet-titel').textContent=t+' — binnenkort';
+  document.getElementById('loc-sheet-tekst').textContent='Signalen van ondermijnende criminaliteit kunnen zich ook '+(k==='online'?'online':'thuis')+' voordoen. Dat is een lastigere locatie. We onderzoeken en onderbouwen deze, samen met de andere locaties, met psychologen, criminologen, kenners en praktijkstudies. Dit volgt in een latere versie.';
+  document.getElementById('loc-sheet-bg').classList.add('open');
+}
+function sluitLocInfo(){document.getElementById('loc-sheet-bg').classList.remove('open');}
 </script>
 </body>
 </html>
